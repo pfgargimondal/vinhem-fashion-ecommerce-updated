@@ -24,15 +24,31 @@ export const filterReducer = (state, action) => {
         case "SORT_BY":
             return {...state, sortBy: payload.sortBy}
 
+        case "NEW_ARRIVAL":
+            return {...state, newIn: payload.newIn}
+
+        case "READY_TO_SHIP":
+            return {...state, readyToShip: payload.readyToShip}
+
+        case "ON_SALE":
+            return {...state, onSale: payload.onSale}
+
+        case "CSTM_FIT":
+            return {...state, cstmFit: payload.cstmFit}
+
         case "REST_FILTER":
             return {
-                productList: [],
+                ...state,
                 color: null,
                 fabric: null,
                 designer: null,    
                 size: null,
                 occasion: null,
-                sortBy: null
+                sortBy: null,
+                newIn: false,
+                readyToShip: null,
+                onSale: false,
+                cstmFit: false
             }
 
         default:

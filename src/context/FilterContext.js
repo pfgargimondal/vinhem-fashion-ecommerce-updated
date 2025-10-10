@@ -9,7 +9,11 @@ const filterInitialState = {
     designer: null,    
     size: null,
     occasion: null,
-    sortBy: null
+    sortBy: null,
+    newIn: false,
+    readyToShip: null,
+    onSale: false,
+    cstmFit: false    
 }
 
 const FilterContext = createContext(filterInitialState);
@@ -136,8 +140,80 @@ export const FilterProvider = ({children}) => {
     }
 
 
+    //new arrival
 
-    const filteredProducts = filterSortBy(filterOccasion(filterSize(filterDesigner(filterFabric(filterColor(state.productList))))));
+    function setNewArrival(value) {
+        dispatch({
+            type: "NEW_ARRIVAL",
+            payload: {
+                newIn: value
+            }
+        })
+    }
+
+    function filterNewArrival(products) {
+        return state.newIn ? products.filter(product => product?.new_arrival?.toString().trim().toLowerCase() === "yes") : products;
+    }
+
+
+    //ready to ship
+
+    function setReadyToShip(value) {
+        dispatch({
+            type: "READY_TO_SHIP",
+            payload: {
+                readyToShip: value
+            }
+        })
+    }
+
+    function filterReadyToShip(products) {
+        return state.readyToShip ? products.filter(product => product?.product_category?.toString()?.trim()?.toLowerCase() === state.readyToShip?.toString()?.trim()?.toLowerCase()) : products;
+    }
+
+
+    // custom fit
+
+    function setCstmFit(value) {
+        dispatch({
+            type: "CSTM_FIT",
+            payload: {
+            cstmFit: value,
+            },
+        });
+    }
+
+    function filterCstmFit(products) {
+        return state.cstmFit ? products.filter(product => product?.custom_fit?.toString().trim().toLowerCase() === "yes") : products;
+    }
+
+
+    //on sale
+
+    function setOnSale(value) {
+        dispatch({
+            type: "ON_SALE",
+            payload: {
+                onSale: value
+            }
+        })
+    }
+
+    function filterOnSale(products) {
+        return state.onSale ? products.filter(product => product?.discount >= 17) : products;
+    }
+
+
+    //reset
+    
+    function resetFilter() {
+        dispatch({
+            type: "REST_FILTER"
+        })
+    }
+
+
+    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterSize(filterDesigner(filterFabric(filterColor(state.productList))))))))));
 
 
 
@@ -149,7 +225,12 @@ export const FilterProvider = ({children}) => {
         setDesigner,
         setSize,
         setOccasion,
-        setSortBy
+        setSortBy,
+        setNewArrival,
+        setReadyToShip,
+        setCstmFit,
+        setOnSale,
+        resetFilter
     }
 
     return (

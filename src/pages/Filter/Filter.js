@@ -13,9 +13,10 @@ import { useFilter } from "../../context/FilterContext";
 export const Filter = () => {
   const { user } = useAuth();
   const location = useLocation();
+    // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, setSortBy } = useFilter();
+  const { products, initialProductList, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -44,9 +45,9 @@ export const Filter = () => {
       : body.classList.remove("overflow-hidden");
   }, [resFltrMenu]);
 
-  const handleFilterChange = (value) => {
-    navigate(`/${value}`);
-  };
+  // const handleFilterChange = (value) => {
+  //   navigate(`/${value}`);
+  // };
 
 
     const segments = location.pathname.split("/").filter(Boolean);
@@ -198,7 +199,7 @@ export const Filter = () => {
                   <i class="fa-solid me-1 fa-filter"></i> Filter
                 </h5>
 
-                <i class="bi bi-chevron-bar-left"></i>
+                <h6 onClick={() => resetFilter()} className="mb-0">Reset Filter</h6>
               </div>
 
               <div
@@ -232,42 +233,39 @@ export const Filter = () => {
                       </div>
                     </div> */}
                     <div className="doewnkrhwer">
-                      <input
-                        type="checkbox"
-                        className="d-none"
-                        id="huidweujr"
-                        checked={category === "new-in"}
-                        onChange={() => handleFilterChange("new-in")}
-                      />
+                      <input type="checkbox" className="d-none" id="huidweujr" name="djikeiewr" onChange={(e) => setNewArrival(e.target.checked)} />
+
                       <label htmlFor="huidweujr" className="btn btn-main me-1">
                         <i className="bi me-1 bi-plus-circle-dotted"></i> New
                       </label>
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input
-                        type="checkbox"
-                        className="d-none"
-                        id="huidweujrjuhjkh"
-                        checked={category === "ready-to-ship"}
-                        onChange={() => handleFilterChange("ready-to-ship")}
-                      />
-                      <label
-                        htmlFor="huidweujrjuhjkh"
-                        className="btn btn-main me-1"
-                      >
-                        <i className="bi me-1 bi-lightning-charge"></i> Ready to
-                        Ship
+                      <input type="checkbox" className="d-none" id="daedfweweer" name="djikeiewr" value="READY TO SHIP" onChange={(e) => setReadyToShip(e.target.checked ? e.target.value : null)}/>
+
+                      <label htmlFor="daedfweweer" className="btn btn-main me-1">
+                        <i className="bi me-1 bi-lightning-charge"></i> Ready to Ship
                       </label>
                     </div>
-                    <Link to={'/on-sale'}>
-                      <div className="btn btn-main me-1">
-                          <i class="bi me-1 bi-receipt"></i> On Sale
-                      </div>
-                    </Link>
-                    <button className="btn btn-main">
-                      <i class="bi me-1 bi-vignette"></i> Custom-fit
-                    </button>
+
+                    <div className="doewnkrhwer">
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="gfdewerwr" onChange={(e) => setOnSale(e.target.checked)}/>
+                      
+                      <label
+                        htmlFor="gfdewerwr"
+                        className="btn btn-main me-1"
+                      >
+                        <i class="bi me-1 bi-receipt"></i> On Sale
+                      </label>
+                    </div>
+
+                    <div className="doewnkrhwer">
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="asddettt" onChange={(e) => setCstmFit(e.target.checked)}/>
+
+                      <label htmlFor="asddettt" className="btn btn-main me-1">
+                        <i class="bi me-1 bi-vignette"></i>  Custom-fit
+                      </label>
+                    </div>                    
                   </div>
                 </div>
 

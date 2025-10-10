@@ -8,7 +8,6 @@ import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import Modal from 'react-bootstrap/Modal';
 // eslint-disable-next-line
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
@@ -17,17 +16,26 @@ import { FeaturedProducts } from "../../components";
 import "./Css/ProductDetail.css";
 import "./Css/ProductDetailResponsive.css";
 import "swiper/css";
+// eslint-disable-next-line
 import { FooterTopComponent } from "../../components/Others/FooterTopComponent";
 import http from "../../http";
+import { useAuth } from "../../context/AuthContext";
+import { useWishlist } from "../../context/WishlistContext";
 
 export const ProductDetail = () => {
+
+  const { user } = useAuth();
+  // eslint-disable-next-line
   const [show, setShow] = useState(false);
+  // eslint-disable-next-line
   const [showMjri, setShowMjri] = useState(false);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   // const [mesremntGuideImgShow, setMesremntGuideImgShow] = useState(false);
   const [activeGuide, setActiveGuide] = useState(null);
   const { slug } = useParams();
   const [shareModal, setShareModal] = useState(false);
+  const [turbanModal, setTurbanModal] = useState(false);
+  const [mojriModal, setMojriModal] = useState(false);
 
   useEffect(() => {
     if (slug) {
@@ -151,16 +159,7 @@ export const ProductDetail = () => {
   const handleGuideClick = (item) => {
     setActiveGuide(activeGuide === item ? null : item);
   }
-
-  //turbon modal
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  //mojri modal
-
-  const handleMClose = () => setShowMjri(false);
-  const handleMShow = () => setShowMjri(true);
+  
 
   // eslint-disable-next-line
   const [activeTab, setActiveTab] = useState("tab-1");
@@ -210,6 +209,16 @@ export const ProductDetail = () => {
       html.classList.remove("overflow-hidden"); 
     }
   }, [showSizeModal]);
+
+  const { wishlistIds, addToWishlist, removeFromWishlist } = useWishlist();
+
+  const toggleWishlist = (productId) => {
+    if (wishlistIds.includes(productId)) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist(productId);
+    }
+  };
 
   const [productDetails, SetproductDetails] = useState({});
   
@@ -326,12 +335,38 @@ export const ProductDetail = () => {
                       <div className="dfhdfhd">
                         <i class="bi me-3 bi-share" onClick={() => setShareModal(!shareModal)}></i>
 
-                        <i className="fa-regular fa-heart" />
+                        {/* <i className="fa-regular fa-heart" /> */}
+
+                        {user ? (
+                        <>
+                          <i onClick={() =>
+                            toggleWishlist(
+                              productDetails.id
+                            )
+                          }
+                          className={
+                            wishlistIds.includes(
+                              productDetails.id
+                            )
+                              ? "fa-solid fa-heart"
+                              : "fa-regular fa-heart"
+                          }
+                          ></i>
+                        </>
+                      ) : (
+                        <>
+                          <Link to="/login">
+                              <i class="fa-regular fa-heart"></i>
+                              <i class="fa-solid d-none fa-heart"></i>
+                          </Link>
+                        </>
+                      )}
+
                       </div>
                     </div>
 
                     <div className="fhdfgh">
-                      <p className="d-flex align-items-center flex-wrap">Item ID: PMN124-S87LAZO4TH | Views 309 <i class="bi ms-2 bi-eye"></i></p>
+                      <p className="d-flex align-items-center flex-wrap">Item ID: {productDetails?.data?.item_id} | Views {productDetails?.data?.views} <i class="bi ms-2 bi-eye"></i></p>
                     </div>
 
                     <div className="dfjghdfgdff58 mb-4">
@@ -458,7 +493,7 @@ export const ProductDetail = () => {
                             </div>
 
                             <div className="col-lg-4 col-md-4 col-sm-4 col-4">
-                              <p className="chrt-sze mb-0" onClick={handleShow}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              <p className="chrt-sze mb-0" onClick={() => setTurbanModal(!turbanModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
                             </div>
                           </div>
                         </div>
@@ -524,7 +559,7 @@ export const ProductDetail = () => {
                             </div>
 
                             <div className="col-lg-4 col-md-4 col-sm-4 col-4">
-                              <p className="chrt-sze mb-0" onClick={handleMShow}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              <p className="chrt-sze mb-0" onClick={() => setMojriModal(!mojriModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
                             </div>
                           </div>
                         </div>
@@ -579,7 +614,11 @@ export const ProductDetail = () => {
                         <div className="col-lg-6">
                           <ul className="mb-0 ps-0">
                             <li>
-                              <i class="bi me-1 bi-check2-circle"></i>{" "}
+                              {productDetails?.data?.non_returnable?.toLowerCase() === 'no' ? (
+                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
+                              ) : (
+                                <i className="bi me-1 bi-check2-circle"></i>
+                              )}
                               Non-returnable/non-exchangeable
                             </li>
                           </ul>
@@ -588,7 +627,11 @@ export const ProductDetail = () => {
                         <div className="col-lg-6">
                           <ul className="mb-0 ps-0">
                             <li>
-                              <i class="bi me-1 bi-check2-circle"></i> Premium
+                              {productDetails?.data?.premium_quality?.toLowerCase() === 'no' ? (
+                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
+                              ) : (
+                                <i className="bi me-1 bi-check2-circle"></i>
+                              )} Premium
                               Quality
                             </li>
                           </ul>
@@ -597,7 +640,11 @@ export const ProductDetail = () => {
                         <div className="col-lg-6">
                           <ul className="mb-0 ps-0">
                             <li>
-                              <i class="bi me-1 bi-check2-circle"></i> Free
+                              {productDetails?.data?.free_shipping?.toLowerCase() === 'no' ? (
+                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
+                              ) : (
+                                <i className="bi me-1 bi-check2-circle"></i>
+                              )} Free
                               Shipping
                             </li>
                           </ul>
@@ -606,7 +653,11 @@ export const ProductDetail = () => {
                         <div className="col-lg-6">
                           <ul className="mb-0 ps-0">
                             <li>
-                              <i class="bi me-1 bi-check2-circle"></i>
+                              {productDetails?.data?.personalized_styling?.toLowerCase() === 'no' ? (
+                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
+                              ) : (
+                                <i className="bi me-1 bi-check2-circle"></i>
+                              )}
                               Personalized Styling
                             </li>
                           </ul>
@@ -623,13 +674,22 @@ export const ProductDetail = () => {
                         <h4 className="mb-0 me-2">Coupon Code -</h4>
 
                         <div className="oijdmkmeiwrew">
-                          <div className="copn-cde text-center py-2 px-3 mb-2 me-2 rounded-2">
-                            <h5 className="mb-0">F1010 & 10% Off</h5>
-                          </div>
-
-                          <div className="copn-cde text-center py-2 px-3 me-2 rounded-2">
-                            <h5 className="mb-0">B1G1 & Buy 1 Get 1</h5>
-                          </div>                          
+                          {productDetails?.data?.coupon_code && (
+                            productDetails.data.coupon_code
+                              .split(" , ") // Split by comma to get each coupon
+                              .map((coupon, index) => { 
+                                return (
+                                  <div
+                                    key={index}
+                                    className="copn-cde text-center py-2 px-3 mb-2 me-2 rounded-2"
+                                  >
+                                    <h5 className="mb-0">
+                                      {coupon.trim()}
+                                    </h5>
+                                  </div>
+                                );
+                              })
+                          )}                         
                         </div>
                       </div>
                     </div>
@@ -702,9 +762,7 @@ export const ProductDetail = () => {
                       <hr />
 
                       <p className="mb-4">
-                        Yellow saree made from 2x4 organza featuring intricate
-                        embroidery along the border. Paired with a padded silk
-                        chanderi blouse with a back tie-up detail.
+                        {productDetails?.data?.product_description}
                       </p>
 
                       <div className="dikewnirhwerjwer">
@@ -717,144 +775,157 @@ export const ProductDetail = () => {
                             <div className="row">
                               <div className="col-lg-6 mb-4">
                                 <div className="idnewihrwer_inner">
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      No of Component <br /> <span>3</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.no_of_component !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        No of Component <br /> <span>{productDetails?.data?.no_of_component}</span>
+                                      </p>
+                                    </div>
+                                  )}
+                                  {productDetails?.data?.type_of_work !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Type of Work <br /> <span>{productDetails?.data?.type_of_work}</span>
+                                      </p>
+                                    </div>
+                                  )}
+                           
+                                  {productDetails?.data?.color !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Color <br /> <span>{productDetails?.data?.color}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Noteworthy Feature <br />{" "}
-                                      <span>
-                                        Intricate embroidery detailing on blouse
-                                        and saree border., Back tie-up detail on
-                                        blouse with tassel accents.
-                                      </span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.dupatta_color !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Dupatta Color <br />
+                                        <span>
+                                          {productDetails?.data?.dupatta_color}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Style Genre <br />{" "}
-                                      <span>Classic Indian style saree</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.jacket_color !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Jacket Color <br />
+                                        <span>
+                                          {productDetails?.data?.jacket_color}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Type of Work <br /> <span>Embroidery</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.bottom_closure !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Bottom Closure <br />
+                                        <span>
+                                          {productDetails?.data?.bottom_closure}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Color <br /> <span>Yellow</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.bottom_closure !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Bottom Closure <br />
+                                        <span>
+                                          {productDetails?.data?.bottom_closure}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Sleeve Style <br />{" "}
-                                      <span>Fitted Sleeve</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.inner_lining !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Inner Lining <br />
+                                        <span>
+                                          {productDetails?.data?.inner_lining}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Weight Details <br />{" "}
-                                      <span>
-                                        Approximate Product Weight: 500 g
-                                      </span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.weight !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Weight Details <br />
+                                        <span>
+                                          Approximate Product Weight: {productDetails?.data?.weight}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Visible Items not included <br />{" "}
-                                      <span>
-                                        Only saree, blouse, and petticoat are
-                                        being sold.
-                                      </span>
-                                    </p>
-                                  </div>
-
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Manufactured / Packed & Marketed By – <br />{" "}
-                                      <span>
-                                        Vinhem Fashion Pvt Ltd, Assembled in India
-                                      </span>
-                                    </p>
-                                  </div>
+                                  
                                 </div>
                               </div>
 
                               <div className="col-lg-6 mb-4">
                                 <div className="idnewihrwer_inner">
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Components <br />{" "}
-                                      <span>Saree, Blouse, Petticoat</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.component !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Components <br /> <span>{productDetails?.data?.component}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Occasions <br />{" "}
-                                      <span>
-                                        Suitable for weddings and festive
-                                        occasions
-                                      </span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.occasion !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Occasions <br /> <span>Suitable for {productDetails?.data?.occasion}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Pattern <br />{" "}
-                                      <span>Solid, Embroidered</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.celebrity !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Celebrity <br /> <span>{productDetails?.data?.celebrity}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Fabric <br />{" "}
-                                      <span>Organza, Silk, Chanderi</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.pattern !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Pattern <br /> <span>{productDetails?.data?.pattern}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Neckline Style <br />{" "}
-                                      <span>Plunge Neck</span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.fabric !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Fabric <br /> <span>{productDetails?.data?.fabric}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Size Details <br />{" "}
-                                      <span>
-                                        Saree Length: 45 inches, Blouse Length: 13
-                                        inches
-                                      </span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.fit_type !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Fit <br /> <span>Fit: {productDetails?.data?.fit_type}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Fit <br />{" "}
-                                      <span>
-                                        Fit: Blouse: Slim Fit, Saree: Regular Fit
-                                      </span>
-                                    </p>
-                                  </div>
+                                  {productDetails?.data?.care_instruction !== null && (
+                                    <div className="odjjkwehrihwerewr mb-4">
+                                      <p>
+                                        Care Instruction <br /> <span> {productDetails?.data?.care_instruction}</span>
+                                      </p>
+                                    </div>
+                                  )}
 
-                                  <div className="odjjkwehrihwerewr mb-4">
-                                    <p>
-                                      Care Instruction <br />{" "}
-                                      <span>Dry clean</span>
-                                    </p>
-                                  </div>
                                 </div>
                               </div>
 
@@ -904,7 +975,7 @@ export const ProductDetail = () => {
 
                       <p>
                         This product is non-returnable.{" "}
-                        <Link to="/">More Details</Link>
+                        <Link to="/return-policy">More Details</Link>
                       </p>
                     </div>
                   </div>
@@ -1759,29 +1830,36 @@ export const ProductDetail = () => {
 
       {/* turbon chart size */}
 
-      <Modal show={show} className="men-chart-size" onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Turbon Chart Size</Modal.Title>
-        </Modal.Header>
+      <div className={`${turbanModal ? "turbon-chart-modal-backdrop" : "turbon-chart-modal-backdrop turbon-chart-modal-backdrop-hide"} w-100 h-100 position-fixed`}></div>
 
-        <Modal.Body>
+      <div className={`${turbanModal ? "turbon-chart-modal" : "turbon-chart-modal turbon-chart-modal-hide"} position-fixed bg-white`}>
+        <div className="s-s-m-header d-flex align-items-center justify-content-between p-3 border-bottom">
+          <h4 className="mb-0">Turbon Chart Size</h4>
+
+          <i class="bi bi-x-lg" onClick={() => setTurbanModal(false)}></i>
+        </div>
+
+        <div className="s-s-m-options p-3 align-items-center justify-content-center">
           <img src="/images/turban.jpg" className="img-fluid" alt="" />
-        </Modal.Body>
-      </Modal>
+        </div>
+      </div>
+      
 
       {/* mojri chart size */}
 
-      <Modal show={showMjri} className="men-chart-size" onHide={handleMClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Turbon Chart Size</Modal.Title>
-        </Modal.Header>
+      <div className={`${mojriModal ? "mojri-chart-modal-backdrop" : "mojri-chart-modal-backdrop mojri-chart-modal-backdrop-hide"} w-100 h-100 position-fixed`}></div>
 
-        <Modal.Body>
+      <div className={`${mojriModal ? "mojri-chart-modal" : "mojri-chart-modal mojri-chart-modal-hide"} position-fixed bg-white`}>
+        <div className="s-s-m-header d-flex align-items-center justify-content-between p-3 border-bottom">
+          <h4 className="mb-0">Mojri Chart Size</h4>
+
+          <i class="bi bi-x-lg" onClick={() => setMojriModal(false)}></i>
+        </div>
+
+        <div className="s-s-m-options p-3 align-items-center justify-content-center">
           <img src="/images/mojri.jpg" className="img-fluid" alt="" />
-        </Modal.Body>
-      </Modal>
-
-      <FooterTopComponent />
+        </div>
+      </div>
     </>
   );
 };

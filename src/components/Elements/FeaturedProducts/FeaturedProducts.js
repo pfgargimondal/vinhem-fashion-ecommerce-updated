@@ -25,11 +25,11 @@ export const FeaturedProducts = ({ featuredProduct }) => {
         <div className="dfgjhbdfg">
             <div className="images">
               <div className="image row mx-0 position-relative">
-                {featuredProduct?.discount && (
+                {/* {featuredProduct?.discount && (
                   <div className="dscnt-prce px-0">
                     <span className="price">{featuredProduct?.discount}% <br/> OFF</span>
                   </div>
-                )}
+                )} */}
 
                 {(featuredProduct?.new_arrival?.toLowerCase() === "yes") && (
                   <div className="nw-arrvl px-0">
