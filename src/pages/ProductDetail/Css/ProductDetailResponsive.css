@@ -1,0 +1,172 @@
+@media only screen and (max-width: 991px){
+    .customize-modal,
+    .men-chart-size .modal-dialog{
+        width: 90% !important;
+    }
+    
+    .men-chart-size .modal-dialog{
+        margin-inline: auto;
+    }
+
+    .dowehrinwejikhriwer span.djknakknewrr{
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .dowehrinwejikhriwer span.djknakknewrr:before{
+        transform: translate(-50%, -50%) rotate(90deg);
+        height: 10rem;
+    }
+
+    .size-guide-modal {
+        width: 95%;
+    }
+
+    .customize-modal #co-close-btn{
+        top: 3%;
+    }
+
+    .doienkwjrewewr.p-5{
+        padding: 1.2rem !important;
+    }
+
+    .doienkwjrewewr img.mb-3{
+        margin-bottom: 0 !important;
+    }
+
+    .dewnrkhwerwe{
+        display: flex;
+        margin-top: 1rem;
+    }
+}
+
+
+
+
+@media screen and (max-width: 767px) and (min-width: 575px){
+    .dowejkrnwerwer{
+        flex-wrap: wrap;
+    }
+
+    .dowejkrnwerwer h4.mb-0{
+        margin-bottom: 1rem !important;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 551px){
+    .dowejkrnwerwer{
+        flex-wrap: wrap;
+    }
+
+    .dowejkrnwerwer h4.mb-0{
+        margin-bottom: 1rem !important;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 478px){
+    .skdncfjsdbcfksdnf .btn-main{
+        padding-inline: 0 !important;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 420px){
+    .skdncfjsdbcfksdnf .btn-main img {
+        width: 1.2rem;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 416px){
+    .dkewnjkhriwer .d-flex{
+        flex-wrap: wrap;        
+    }
+
+    .dkewnjkhriwer .d-flex.justify-content-between{
+        justify-content: center !important;
+    }
+
+    .dkewnjkhriwer h5{
+        border-bottom: 1px solid #d7d7d7;        
+    }
+}
+
+
+
+
+
+
+@media only screen and (max-width: 392px){
+    .skdncfjsdbcfksdnf .btn-main,
+    .slkdnfkmslkmr p.chrt-sze,
+    .opjdjwerwer p.chngd-price{
+        font-size: 0.8rem;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 366px){
+    .saoijhdekjwirwer .dowekrwerwer label.p-3{
+        padding: 0.3rem !important;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 349px){
+    .dfgndfjhgdf .btn-main{
+        width: 100%;
+    }
+
+    .dfgndfjhgdf .btn-transparent{
+        margin-top: 0.5rem;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 341px){
+    .skdncfjsdbcfksdnf .btn-main,
+    .slkdnfkmslkmr p.chrt-sze,
+    .opjdjwerwer p.chngd-price{
+        font-size: 0.6rem;
+    }
+
+    .dgndfjgdf .form-select,
+    .kcwenjkkwenkrhwer .form-select{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 0.9rem;
+    }
+}
+
+
+
+
+
+@media only screen and (max-width: 290px){
+    .skdncfjsdbcfksdnf .btn-main img {
+        width: 0.8rem;
+    }
+}
