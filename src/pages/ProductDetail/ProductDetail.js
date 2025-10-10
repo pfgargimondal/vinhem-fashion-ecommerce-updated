@@ -221,6 +221,34 @@ export const ProductDetail = () => {
   };
 
   const [productDetails, SetproductDetails] = useState({});
+
+  const getEstimatedShippingDate = (shipping_time) => {
+    const days = parseInt(shipping_time);
+    if (isNaN(days)) return "";
+
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+
+    const day = date.getDate();
+    const month = date.toLocaleString("en-US", { month: "long" });
+    const year = date.getFullYear();
+
+    return `${day}${getDaySuffix(day)} ${month} ${year}`;
+  };
+
+  const getDaySuffix = (day) => {
+    if (day >= 11 && day <= 13) return "th";
+    switch (day % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
   
   useEffect(() => {
     const fetchProductDetailsPage = async () => {
@@ -962,19 +990,21 @@ export const ProductDetail = () => {
                       <h6>Shipping & Returns</h6>
 
                       <p className="mb-1">
-                        Product will be shipped by 12 July 2025
+                        Product will be shipped by {getEstimatedShippingDate(
+                                      productDetails?.data?.shipping_time
+                                    )} 
                       </p>
 
                       <p className="mb-3">
                         For customizations & early delivery, chat with us on
-                        WhatsApp at <a href="/">+91 8291990059</a> or call us at{" "}
+                        WhatsApp at <a href="/">+91 8291990059</a> or call us at 
                         <a href="/">022-42792123</a>
                       </p>
 
                       <p className="mb-2">Return Policy</p>
 
                       <p>
-                        This product is non-returnable.{" "}
+                        This product is non-returnable.
                         <Link to="/return-policy">More Details</Link>
                       </p>
                     </div>

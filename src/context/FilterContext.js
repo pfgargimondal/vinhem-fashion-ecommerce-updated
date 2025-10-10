@@ -219,6 +219,8 @@ export const FilterProvider = ({children}) => {
 
     const value = {
         products: filteredProducts,
+        onSale: state.onSale,
+        newIn: state.newIn,
         initialProductList,
         setColor,
         setFabric,

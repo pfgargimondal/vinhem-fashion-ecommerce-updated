@@ -16,7 +16,7 @@ export const Filter = () => {
     // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter } = useFilter();
+  const { products, initialProductList, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -293,13 +293,13 @@ export const Filter = () => {
                         <div className="dfgjhbdfg">
                           <div className="images">
                             <div className="image row mx-0 position-relative">
-                              {product?.discount && (
+                              {onSale && product?.discount && (
                                 <div className="dscnt-prce px-0">
                                   <span className="price">{product?.discount}% <br/> OFF</span>
                                 </div>
                               )}
 
-                              {(product?.new_arrival.toLowerCase() === "yes") && (
+                              {newIn && product?.new_arrival.toLowerCase() === "yes" && (
                                 <div className="nw-arrvl px-0">
                                   <span className="price"><i>NEW IN</i></span>
                                 </div>

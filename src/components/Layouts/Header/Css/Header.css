@@ -254,6 +254,16 @@ header .header-main .swiper-slide:hover .header-mega-menu{
   box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
 }
 
+header .header-main .swiper-slide:nth-of-type(10n - 5):hover .header-mega-menu,
+header .header-main .swiper-slide:nth-of-type(10n - 1):hover .header-mega-menu{
+  top: 67%;
+  left: 0;
+  right: 0;
+  z-index: -999;
+  visibility: hidden;
+  transition: 0.1s ease-in-out;
+}
+
 .h-m-m-inner{
   border-top: 1px solid var(--light-background-color);
   border-bottom: 1px solid var(--light-background-color);
