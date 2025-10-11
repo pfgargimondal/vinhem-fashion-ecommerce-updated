@@ -8,11 +8,14 @@ import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Modal from 'react-bootstrap/Modal';
 // eslint-disable-next-line
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import RecentlyViewed from "../../hooks/RecentlyViewed";
 import { FeaturedProducts } from "../../components";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 import "./Css/ProductDetail.css";
 import "./Css/ProductDetailResponsive.css";
 import "swiper/css";
@@ -36,6 +39,25 @@ export const ProductDetail = () => {
   const [shareModal, setShareModal] = useState(false);
   const [turbanModal, setTurbanModal] = useState(false);
   const [mojriModal, setMojriModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [activeKey, setActiveKey] = useState("first");
+
+
+  const handlePGShowModal = (e, key) => {
+    e.preventDefault();
+
+    setActiveKey(key);
+    setShowModal(true);    
+  };
+
+  useEffect(() => {
+    const html = document.querySelector("html");
+
+    showModal ? html.classList.add("overflow-hidden") : html.classList.remove("overflow-hidden");
+  }, [showModal]);
+
+  const handlePGClose = () => setShowModal(false);
+
 
   useEffect(() => {
     if (slug) {
@@ -280,33 +302,66 @@ export const ProductDetail = () => {
                       <Row>
                         <Col xs={3} className="small-image-tabs pe-0">
                           <Nav variant="pills" className="flex-column">
-                            <Nav.Item>
-                              <Nav.Link eventKey="first">
-                                <img src="../../images/1.jpg" alt="" />
-                              </Nav.Link>
-                            </Nav.Item>
+                            {productDetails?.data?.product_image?.encoded_image_url_1 && (
+                              <Nav.Item>
+                                <Nav.Link eventKey="first">
+                                  <img src={productDetails?.data?.product_image?.encoded_image_url_1} alt="" />
+                                </Nav.Link>
+                              </Nav.Item>
+                            )}                    
 
-                            <Nav.Item>
-                              <Nav.Link eventKey="second">
-                                <img src="../../images/2.jpg" alt="" />
-                              </Nav.Link>
-                            </Nav.Item>
+                            {productDetails?.data?.product_image?.encoded_image_url_2 && (
+                              <Nav.Item>
+                                <Nav.Link eventKey="second">
+                                  <img src={productDetails?.data?.product_image?.encoded_image_url_2} alt="" />
+                                </Nav.Link>
+                              </Nav.Item>
+                            )}                            
 
-                            <Nav.Item>
-                              <Nav.Link eventKey="third">
-                                <img src="../../images/3.jpg" alt="" />
-                              </Nav.Link>
-                            </Nav.Item>
+                            {productDetails?.data?.product_image?.encoded_image_url_3 && (
+                              <Nav.Item>
+                                <Nav.Link eventKey="third">
+                                  <img src={productDetails?.data?.product_image?.encoded_image_url_3} alt="" />
+                                </Nav.Link>
+                              </Nav.Item>
+                            )}                            
 
-                            <Nav.Item>
-                              <Nav.Link eventKey="fourth">
-                                <img src="../../images/4.jpg" alt="" />
-                              </Nav.Link>
-                            </Nav.Item>
+                            {productDetails?.data?.product_image?.encoded_image_url_4 && (
+                              <Nav.Item>
+                                <Nav.Link eventKey="fourth">
+                                  <img src={productDetails?.data?.product_image?.encoded_image_url_4} alt="" />
+                                </Nav.Link>
+                              </Nav.Item>
+                            )}                            
 
-                            <Nav.Item>
-                              <Nav.Link eventKey="fifth">
-                                <img src="../../images/5.jpg" alt="" />
+                            {productDetails?.data?.product_image?.encoded_image_url_5 && (
+                              <Nav.Item>
+                                <Nav.Link eventKey="fifth">
+                                  <img src={productDetails?.data?.product_image?.encoded_image_url_5} alt="" />
+                                </Nav.Link>
+                              </Nav.Item>
+                            )}                            
+
+                            {productDetails?.data?.product_image?.encoded_image_url_6 && (
+                              <Nav.Item>
+                                <Nav.Link eventKey="sixth">
+                                  <img src={productDetails?.data?.product_image?.encoded_image_url_6} alt="" />
+                                </Nav.Link>
+                              </Nav.Item>
+                            )}
+
+                            <Nav.Item className="nijnihninerrr">
+                              <Nav.Link eventKey="seventh">
+                                <div className="dowenfrkwer position-relative">
+                                  <video>
+                                    <source src="../../images/sdaw.mp4" type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                  </video>
+
+                                  <div className="dnweikrwer overflow-hidden rounded-pill position-absolute">
+                                    <i class="bi position-absolute bi-play-fill"></i>
+                                  </div>
+                                </div>
                               </Nav.Link>
                             </Nav.Item>
                           </Nav>
@@ -315,24 +370,71 @@ export const ProductDetail = () => {
                         <Col xs={9} className="large-image-tab">
                           <div className="doerfkwerewrewr position-relative">
                             <Tab.Content>
-                              <Tab.Pane eventKey="first">
-                                <img src="../../images/1.jpg" alt="" />
-                              </Tab.Pane>
-
-                              <Tab.Pane eventKey="second">
-                                <img src="../../images/2.jpg" alt="" />
-                              </Tab.Pane>
-
-                              <Tab.Pane eventKey="third">
-                                <img src="../../images/3.jpg" alt="" />
-                              </Tab.Pane>
-
-                              <Tab.Pane eventKey="fourth">
-                                <img src="../../images/4.jpg" alt="" />
-                              </Tab.Pane>
-
-                              <Tab.Pane eventKey="fifth">
-                                <img src="../../images/5.jpg" alt="" />
+                              {productDetails?.data?.product_image?.encoded_image_url_1 && (
+                                <Tab.Pane eventKey="first">
+                                  <img
+                                    src={productDetails?.data?.product_image?.encoded_image_url_1}
+                                    alt=""
+                                    onClick={(e) => handlePGShowModal(e, "first")}
+                                    style={{ cursor: "zoom-in" }}
+                                  />
+                                </Tab.Pane>
+                              )}
+                              {productDetails?.data?.product_image?.encoded_image_url_2 && (
+                                <Tab.Pane eventKey="second">
+                                  <img
+                                    src={productDetails?.data?.product_image?.encoded_image_url_2}
+                                    alt=""
+                                    onClick={(e) => handlePGShowModal(e, "second")}
+                                    style={{ cursor: "zoom-in" }}
+                                  />
+                                </Tab.Pane>
+                              )}
+                              {productDetails?.data?.product_image?.encoded_image_url_3 && (
+                                <Tab.Pane eventKey="third">
+                                  <img
+                                    src={productDetails?.data?.product_image?.encoded_image_url_3}
+                                    alt=""
+                                    onClick={(e) => handlePGShowModal(e, "third")}
+                                    style={{ cursor: "zoom-in" }}
+                                  />
+                                </Tab.Pane>
+                              )}
+                              {productDetails?.data?.product_image?.encoded_image_url_4 && (
+                                <Tab.Pane eventKey="fourth">
+                                  <img
+                                    src={productDetails?.data?.product_image?.encoded_image_url_4}
+                                    alt=""
+                                    onClick={(e) => handlePGShowModal(e, "fourth")}
+                                    style={{ cursor: "zoom-in" }}
+                                  />
+                                </Tab.Pane>
+                              )}
+                              {productDetails?.data?.product_image?.encoded_image_url_5 && (
+                                <Tab.Pane eventKey="fifth">
+                                  <img
+                                    src={productDetails?.data?.product_image?.encoded_image_url_5}
+                                    alt=""
+                                    onClick={(e) => handlePGShowModal(e, "fifth")}
+                                    style={{ cursor: "zoom-in" }}
+                                  />
+                                </Tab.Pane>
+                              )}
+                              {productDetails?.data?.product_image?.encoded_image_url_6 && (
+                                <Tab.Pane eventKey="sixth">
+                                  <img
+                                    src={productDetails?.data?.product_image?.encoded_image_url_6}
+                                    alt=""
+                                    onClick={(e) => handlePGShowModal(e, "sixth")}
+                                    style={{ cursor: "zoom-in" }}
+                                  />
+                                </Tab.Pane>
+                              )}
+                              <Tab.Pane eventKey="seventh" className="odjeowmkoiwewer">
+                                <video controls>
+                                  <source src="../../images/sdaw.mp4" type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
                               </Tab.Pane>
                             </Tab.Content>
 
@@ -426,15 +528,16 @@ export const ProductDetail = () => {
                       <div className="saoijhdekjwirwer row align-items-center mb-3">
                         <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
                           <input type="radio" name="so" id="unstdf" className="d-none position-absolute" />
-
                           <label htmlFor="unstdf" className="p-3">Unstitched Fabric <br /> <span>+<i class="bi bi-currency-rupee"></i>0.00</span></label>
                         </div>
 
-                        <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
-                          <input type="radio" name="so" id="cf" className="d-none position-absolute" />
-
-                          <label htmlFor="cf" className="p-3" id="cstm-fit-btn">Custom-Fit <br /> <span>+<i class="bi bi-currency-rupee"></i>1000.00</span></label>
-                        </div>
+                        {productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
+                          <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
+                            <input type="radio" name="so" id="cf" className="d-none position-absolute" />
+                            <label htmlFor="cf" className="p-3" id="cstm-fit-btn">Custom-Fit <br /> 
+                            <span>+<i class="bi bi-currency-rupee"></i>{productDetails?.data?.extra_charges?.price}</span></label>
+                          </div>
+                        )}
                       </div>
 
                       <div className="ikasdnjiknswjirhwer mb-4">
@@ -448,23 +551,19 @@ export const ProductDetail = () => {
                       <div className="row sdfasdctgerrrrwe">
                         <div className="col-lg-5 col-md-8 col-sm-8 col-8">
                           <div className="dgndfjgdf">
-                            <select name="" id="" className="form-select">
-                              <option value="">Select Size</option>
-
-
-                              <option value="">Select Size</option>
-
-
-                              <option value="">Select Size</option>
-
-
-                              <option value="">Select Size</option>
-
-
-                              <option value="">Select Size</option>
+                            <select name="product_size" id="product_size" className="form-select">
+                              {productDetails?.data?.product_inventory?.map((productSizeVal) => (
+                                <option value={productSizeVal.size_name}>
+                                  {productSizeVal.size_name}
+                                </option>
+                              ))}
                             </select>
 
-                            <p className="mt-2">(Only few left)</p>
+                            <p className="mt-2">
+                              {productDetails?.data?.rts_quantity <= 5 && (
+                                <>Only few left</>
+                              )}
+                            </p>
                           </div>
                         </div>
 
@@ -480,123 +579,158 @@ export const ProductDetail = () => {
                       <label htmlFor="" className="me-1">
                         Qty:
                       </label>
-
-                      <select name="" id="">
-                        <option value="">1</option>
-
-                        <option value="">1</option>
+                      <select name="product_quantity" id="product_quantity"
+                        >
+                          {Array.from(
+                            {
+                              length: Number(
+                                productDetails?.data?.rts_quantity
+                              ),
+                            },
+                            (_, i) => (
+                              <option key={i + 1} value={i + 1}>
+                                {i + 1}
+                              </option>
+                            )
+                          )}
                       </select>
+
                     </div>
 
-                    <div className="sadfvfghbrsd mt-4">
-                      <div className="col-lg-12">
-                        <div className="kcwenjkkwenkrhwer">
-                          <div className="opjdjwerwer mb-3 col-lg-9 row align-items-center justify-content-between">
-                            <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
-                              <div class="checkbox-wrapper-33">
-                                <label class="checkbox">
-                                  <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                    {productDetails?.data?.matching_turban === 'TRUE' && (
+                      <div className="sadfvfghbrsd mt-4">
+                        <div className="col-lg-12">
+                          <div className="kcwenjkkwenkrhwer">
+                            <div className="opjdjwerwer mb-3 col-lg-9 row align-items-center justify-content-between">
+                              <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
+                                <div class="checkbox-wrapper-33">
+                                  <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
 
-                                  <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
-                                  </span>
+                                    <span class="checkbox__symbol">
+                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                      </svg>
+                                    </span>
 
-                                  <p class="checkbox__textwrapper">Matching Turban</p>
-                                </label>
+                                    <p class="checkbox__textwrapper">Matching Turban</p>
+                                  </label>
+                                </div>
                               </div>
+
+                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
+                                <i class="bi bi-currency-rupee"></i>
+                                {productDetails?.data?.turban_charges
+                                    ? productDetails?.data?.turban_charges?.price
+                                    : "0.00"}
+                              </p>
                             </div>
 
-                            <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">USD 23.20</p>
-                          </div>
+                            <div className="slkdnfkmslkmr row align-items-center">
+                              <div className="col-lg-8 col-md-8 col-sm-8 col-8">
+                                <select name="" className="form-select" id="">
+                                  <option value="" disabled selected>Select Size</option>
 
-                          <div className="slkdnfkmslkmr row align-items-center">
-                            <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                              <select name="" className="form-select" id="">
-                                <option value="" disabled selected>Select Size</option>
+                                  <option value="">1</option>
+                                </select>
+                              </div>
 
-                                <option value="">1</option>
-                              </select>
-                            </div>
-
-                            <div className="col-lg-4 col-md-4 col-sm-4 col-4">
-                              <p className="chrt-sze mb-0" onClick={() => setTurbanModal(!turbanModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              <div className="col-lg-4 col-md-4 col-sm-4 col-4">
+                                <p className="chrt-sze mb-0" onClick={() => setTurbanModal(!turbanModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    <div className="sadfvfghbrsd mt-4">
-                      <div className="col-lg-12">
-                        <div className="kcwenjkkwenkrhwer">
-                          <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
-                            <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
-                              <div class="checkbox-wrapper-33">
-                                <label class="checkbox">
-                                  <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                    {productDetails?.data?.matching_stole === 'TRUE' && (
+                      <div className="sadfvfghbrsd mt-4">
+                        <div className="col-lg-12">
+                          <div className="kcwenjkkwenkrhwer">
+                            <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
+                              <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
+                                <div class="checkbox-wrapper-33">
+                                  <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
 
-                                  <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
-                                  </span>
+                                    <span class="checkbox__symbol">
+                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                      </svg>
+                                    </span>
 
-                                  <p class="checkbox__textwrapper">Matching Stole</p>
-                                </label>
+                                    <p class="checkbox__textwrapper">Matching Stole</p>
+                                  </label>
+                                </div>
                               </div>
-                            </div>
 
-                            <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">USD 6.96</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="sadfvfghbrsd mt-4">
-                      <div className="col-lg-12">
-                        <div className="kcwenjkkwenkrhwer">
-                          <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
-                            <div className="doweriwejrwer col-lg-8 col-md-8 col-sm-8 col-8">
-                              <div class="checkbox-wrapper-33">
-                                <label class="checkbox">
-                                  <input class="checkbox__trigger visuallyhidden" type="checkbox" />
-
-                                  <span class="checkbox__symbol">
-                                    <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="M4 14l8 7L24 7"></path>
-                                    </svg>
-                                  </span>
-
-                                  <p class="checkbox__textwrapper">Matching Mojri</p>
-                                </label>
-                              </div>
-                            </div>
-
-                            <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">USD 14.50</p>
-                          </div>
-
-                          <div className="slkdnfkmslkmr row align-items-center">
-                            <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                              <select name="" className="form-select" id="">
-                                <option value="" disabled selected>Select Size</option>
-
-                                <option value="">1</option>
-                              </select>
-                            </div>
-
-                            <div className="col-lg-4 col-md-4 col-sm-4 col-4">
-                              <p className="chrt-sze mb-0" onClick={() => setMojriModal(!mojriModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
+                                <i class="bi bi-currency-rupee"></i>
+                                {productDetails?.data?.stole_charges
+                                    ? productDetails?.data?.stole_charges?.price
+                                    : "0.00"}
+                              </p>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
+
+                    {productDetails?.data?.matching_mojari === 'TRUE' && (
+                      <div className="sadfvfghbrsd mt-4">
+                        <div className="col-lg-12">
+                          <div className="kcwenjkkwenkrhwer">
+                            <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
+                              <div className="doweriwejrwer col-lg-8 col-md-8 col-sm-8 col-8">
+                                <div class="checkbox-wrapper-33">
+                                  <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+
+                                    <span class="checkbox__symbol">
+                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                      </svg>
+                                    </span>
+
+                                    <p class="checkbox__textwrapper">Matching Mojri</p>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
+                                <i class="bi bi-currency-rupee"></i>
+                                {productDetails?.data?.mojri_charges
+                                    ? productDetails?.data?.mojri_charges?.price
+                                    : "0.00"}
+                              </p>
+
+                              
+                            </div>
+
+                            <div className="slkdnfkmslkmr row align-items-center">
+                              <div className="col-lg-8 col-md-8 col-sm-8 col-8">
+                                <select name="" className="form-select" id="">
+                                  <option value="" disabled selected>Select Size</option>
+
+                                  <option value="">1</option>
+                                </select>
+                              </div>
+
+                              <div className="col-lg-4 col-md-4 col-sm-4 col-4">
+                                <p className="chrt-sze mb-0" onClick={() => setMojriModal(!mojriModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="dowejkrnwerwer d-flex mt-4">
                       <div className="doenwkjriwerwer">
-                        <h4 className="mb-0 me-2">You Pay: <span><i class="fa-solid fa-indian-rupee-sign"></i> 1230,322</span></h4>
+                        <h4 className="mb-0 me-2">You Pay: <span><i class="fa-solid fa-indian-rupee-sign">
+                          </i> {productDetails?.data?.selling_price}</span>
+                        </h4>
 
                         <p class="mt-2 mb-0">(Inclusive of all services)</p>
                       </div>
@@ -1143,10 +1277,10 @@ export const ProductDetail = () => {
               <div className="idnjuigkjiwerwer">
                 <div className="ojaskmduihiwerwer mb-4 pb-2">
                   <div className="ihjnugherewr">
-                    <img src="/images/1.jpg" alt="" />
+                    <img src={productDetails?.data?.product_image?.encoded_image_url_1} alt="" />
                   </div>
 
-                  <p>Orange Organza Printed N Sequins Work Saree - SASKA36581102</p>
+                  <p>{productDetails?.data?.product_name} - {productDetails?.data?.PID}</p>
 
                   <div className="mojdowemewr d-flex align-items-center">
                     <div className="vfeerwrwer me-2">
@@ -1221,13 +1355,16 @@ export const ProductDetail = () => {
               <p className="mb-3">Choose a size to be customized:</p>
 
               <div className="okemlkwnjrirwer mb-3 d-flex align-items-center">
-                <div className="doeiwjrkweirwe">
-                  <input id="s1" name="s-optns" type="radio" className="d-none position-absolute" />
 
-                  <label htmlFor="s1" className="text-center p-2"><span className="mb-1">31,500</span> <br /> XS</label>
-                </div>
+                {productDetails?.data?.product_inventory?.map((productSizeVal) => (
+                  <div className="doeiwjrkweirwe">
+                    <input id="s1" name="s-optns" type="radio" className="d-none position-absolute" />
+                    <label htmlFor="s1" className="text-center p-2"><span className="mb-1">{productSizeVal.selling_price}</span> <br /> {productSizeVal.size_name}</label>
+                  </div>
 
-                <div className="doeiwjrkweirwe">
+                ))}
+                
+                {/* <div className="doeiwjrkweirwe">
                   <input id="s2" name="s-optns" type="radio" className="d-none position-absolute" />
 
                   <label htmlFor="s2" className="text-center p-2"><span className="mb-1">31,500</span> <br /> S</label>
@@ -1273,7 +1410,7 @@ export const ProductDetail = () => {
                   <input id="s9" name="s-optns" type="radio" className="d-none position-absolute" />
 
                   <label htmlFor="s9" className="text-center p-2"><span className="mb-1">36,225</span> <br /> 6XL</label>
-                </div>
+                </div> */}
               </div>
 
               <p>Customized orders can take minimum 7 extra working days</p>
@@ -1890,6 +2027,164 @@ export const ProductDetail = () => {
           <img src="/images/mojri.jpg" className="img-fluid" alt="" />
         </div>
       </div>
+
+      
+      {/*pd gllery*/}
+
+      {/* --- Modal with Zoom --- */}
+      <Modal
+          show={showModal}
+          onHide={handlePGClose}
+          centered
+          size="xl"
+          className="zoom-gallery-modal overflow-hidden"
+        >
+        <Modal.Body className="mt-0 px-0 pb-0">
+          <Tab.Container activeKey={activeKey} onSelect={setActiveKey}>
+            <Row>
+              <Col xs={2} className="small-image-tabs pe-0">
+                <Nav variant="pills" className="flex-column">
+                  {productDetails?.data?.product_image?.encoded_image_url_1 && (
+                    <Nav.Item>
+                      <Nav.Link eventKey="first">
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_1}
+                          alt=""
+                        />
+                      </Nav.Link>
+                    </Nav.Item>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_2 && (
+                    <Nav.Item>
+                      <Nav.Link eventKey="second">
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_2}
+                          alt=""
+                        />
+                      </Nav.Link>
+                    </Nav.Item>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_3 && (
+                    <Nav.Item>
+                      <Nav.Link eventKey="third">
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_3}
+                          alt=""
+                        />
+                      </Nav.Link>
+                    </Nav.Item>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_4 && (
+                    <Nav.Item>
+                      <Nav.Link eventKey="fourth">
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_4}
+                          alt=""
+                        />
+                      </Nav.Link>
+                    </Nav.Item>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_5 && (
+                    <Nav.Item>
+                      <Nav.Link eventKey="fifth">
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_5}
+                          alt=""
+                        />
+                      </Nav.Link>
+                    </Nav.Item>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_6 && (
+                    <Nav.Item>
+                      <Nav.Link eventKey="sixth">
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_6}
+                          alt=""
+                        />
+                      </Nav.Link>
+                    </Nav.Item>
+                  )}
+                </Nav>
+              </Col>
+
+              <Col xs={9} className="large-image-tab">
+                <Tab.Content>
+                  {productDetails?.data?.product_image?.encoded_image_url_1 && (
+                    <Tab.Pane eventKey="first">
+                      <Zoom>
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_1}
+                          alt=""
+                          className="zoom-img"
+                        />
+                      </Zoom>
+                    </Tab.Pane>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_2 && (
+                    <Tab.Pane eventKey="second">
+                      <Zoom>
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_2}
+                          alt=""
+                          className="zoom-img"
+                        />
+                      </Zoom>
+                    </Tab.Pane>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_3 && (
+                    <Tab.Pane eventKey="third">
+                      <Zoom>
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_3}
+                          alt=""
+                          className="zoom-img"
+                        />
+                      </Zoom>
+                    </Tab.Pane>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_4 && (
+                    <Tab.Pane eventKey="fourth">
+                      <Zoom>
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_4}
+                          alt=""
+                          className="zoom-img"
+                        />
+                      </Zoom>
+                    </Tab.Pane>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_5 && (
+                    <Tab.Pane eventKey="fifth">
+                      <Zoom>
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_5}
+                          alt=""
+                          className="zoom-img"
+                        />
+                      </Zoom>
+                    </Tab.Pane>
+                  )}
+                  {productDetails?.data?.product_image?.encoded_image_url_6 && (
+                    <Tab.Pane eventKey="sixth">
+                      <Zoom>
+                        <img
+                          src={productDetails?.data?.product_image?.encoded_image_url_6}
+                          alt=""
+                          className="zoom-img"
+                        />
+                      </Zoom>
+                    </Tab.Pane>
+                  )}
+                </Tab.Content>
+              </Col>
+            </Row>
+          </Tab.Container>
+        </Modal.Body>
+
+        <button className="close-btn" onClick={handlePGClose}>
+          ✕
+        </button>
+      </Modal>
     </>
   );
 };
