@@ -4,8 +4,6 @@ import { useFilter } from "../../context/FilterContext";
 export default function FilterSection({ allFilterMappingdata, filterCategories }) {
   const { setColor, setFabric, setDesigner, setSize, setOccasion } = useFilter();
   const [selectedTheme, setSelectedTheme] = useState("");
-  const [catSubDrpdwn, setCatSubDrpdwn] = useState(false);
-  const [catSubDrpdwn2, setCatSubDrpdwn2] = useState(false);
 
   console.log(allFilterMappingdata);
 
