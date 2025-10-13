@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFilter } from "../../context/FilterContext";
 
-export default function FilterSection({ allFilterMappingdata }) {
+export default function FilterSection({ allFilterMappingdata, filterCategories }) {
   const { setColor, setFabric, setDesigner, setSize, setOccasion } = useFilter();
   const [selectedTheme, setSelectedTheme] = useState("");
   const [catSubDrpdwn, setCatSubDrpdwn] = useState(false);
@@ -48,147 +48,77 @@ export default function FilterSection({ allFilterMappingdata }) {
         </div>
 
         <div className="deowjnkrwere bdfgsdfseewewrr">
-          <div className="doewjkrnhweiurwer mb-2">
-            <div class="main-catgry-filter radio-wrapper-5 pe-3">
-              <div className="oijdmeiojewrer d-flex justify-content-between w-100 align-items-center">
-                <label htmlFor="doeklwrwer">Women</label>
+          {filterCategories.map(filterCategory => (
+            <div key={filterCategory.id} className="doewjkrnhweiurwer mb-2">
+              <div class="main-catgry-filter radio-wrapper-5 pe-3">
+                <div className="oijdmeiojewrer d-flex justify-content-between w-100 align-items-center">
+                  <label htmlFor="doeklwrwer">{filterCategory.mainCategory_name}</label>
 
-                <i onClick={() => setCatSubDrpdwn(!catSubDrpdwn)} class="fa-solid fa-plus"></i>
-              </div>            
-            </div>
-
-            {catSubDrpdwn && (
-              <div className="sub-catgry-filter indiewjrwerewr">
-                <div class="radio-wrapper-5 px-3">
-                  <label htmlFor="cdsedfe" className="forCircle">
-                    <input id="cdsedfe" type="radio" name="dasfe" />
-
-                    <span>
-                      <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                      >
-                          <circle data-name="ellipse" cx={8} cy={8} r={8} />
-                      </svg>
-                    </span>
-                  </label>
-
-                  <label htmlFor="cdsedfe">Sarees</label>
-                </div>
-
-                <div class="radio-wrapper-5 px-3">
-                  <label htmlFor="sawdw" className="forCircle">
-                    <input id="sawdw" type="radio" name="dasfe" />
-
-                    <span>
-                      <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                      >
-                          <circle data-name="ellipse" cx={8} cy={8} r={8} />
-                      </svg>
-                    </span>
-                  </label>
-
-                  <label htmlFor="sawdw">Kurta Sets</label>
-                </div>
-
-                <div class="radio-wrapper-5 px-3">
-                  <label htmlFor="frgtrw" className="forCircle">
-                    <input id="frgtrw" type="radio" name="asfghtre" />
-
-                    <span>
-                      <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                      >
-                          <circle data-name="ellipse" cx={8} cy={8} r={8} />
-                      </svg>
-                    </span>
-                  </label>
-
-                  <label htmlFor="frgtrw">Dress Materials</label>
+                  <i class="fa-solid fa-plus"></i>
                 </div>
               </div>
-            )}
-          </div>
 
-          <div className="doewjkrnhweiurwer">
-            <div class="main-catgry-filter radio-wrapper-5 pe-3">
-              <div className="oijdmeiojewrer d-flex justify-content-between w-100 align-items-center">
-                <label htmlFor="doeklwrwer">Men</label>
-
-                <i onClick={() => setCatSubDrpdwn2(!catSubDrpdwn2)} class="fa-solid fa-plus"></i>
-              </div>            
-            </div>
-
-            {catSubDrpdwn2 && (
               <div className="sub-catgry-filter indiewjrwerewr">
-                <div class="radio-wrapper-5 px-3">
-                  <label htmlFor="cdsedfe" className="forCircle">
-                    <input id="cdsedfe" type="radio" name="dasfe" />
+                {filterCategory.sub_categories.map(sub_category => (
+                  <div className="doewjroijwerwer">
+                    <div key={sub_category.id} class="radio-wrapper-5 ps-2 pe-3 justify-content-between align-items-center">
+                      <div className="doiwejirwer d-flex align-items-center">
+                        <label htmlFor="cdsedfe" className="forCircle">
+                          <input id="cdsedfe" type="radio" name="dasfe" />
 
-                    <span>
-                      <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                      >
-                          <circle data-name="ellipse" cx={8} cy={8} r={8} />
-                      </svg>
-                    </span>
-                  </label>
+                          <span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-3.5 w-3.5"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                            >
+                                <circle data-name="ellipse" cx={8} cy={8} r={8} />
+                            </svg>
+                          </span>
+                        </label>
 
-                  <label htmlFor="cdsedfe">Kurta Sets</label>
-                </div>
+                        <label htmlFor="doeklwrwer">{sub_category.subCategories_name.replace(/\s*\(Boys\)|\s*\(Girls\)/gi, "")}</label>
+                      </div>
 
-                <div class="radio-wrapper-5 px-3">
-                  <label htmlFor="sawdw" className="forCircle">
-                    <input id="sawdw" type="radio" name="dasfe" />
+                      <div className="oijdmeiojewrer">
+                        <i class="fa-solid fa-plus"></i>
+                      </div>
+                    </div>
 
-                    <span>
-                      <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                      >
-                          <circle data-name="ellipse" cx={8} cy={8} r={8} />
-                      </svg>
-                    </span>
-                  </label>
+                    <div className="inside-sub-catgry-filter">
+                      {sub_category.filter_categories.map(filter_category => (
+                        <div key={filter_category.id} class="radio-wrapper-5 px-3 justify-content-between align-items-center">
+                          <div className="doiwejirwer d-flex align-items-center">
+                            <label htmlFor="cdsedfe" className="forCircle">
+                              <input id="cdsedfe" type="radio" name="dasfe" />
 
-                  <label htmlFor="sawdw">Sherwanis</label>
-                </div>
+                              <span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-3.5 w-3.5"
+                                    viewBox="0 0 16 16"
+                                    fill="currentColor"
+                                >
+                                    <circle data-name="ellipse" cx={8} cy={8} r={8} />
+                                </svg>
+                              </span>
+                            </label>
 
-                <div class="radio-wrapper-5 px-3">
-                  <label htmlFor="frgtrw" className="forCircle">
-                    <input id="frgtrw" type="radio" name="asfghtre" />
+                            <label htmlFor="doeklwrwer">{filter_category.filterCategories_name}</label>
+                          </div>
 
-                    <span>
-                      <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                      >
-                          <circle data-name="ellipse" cx={8} cy={8} r={8} />
-                      </svg>
-                    </span>
-                  </label>
-
-                  <label htmlFor="frgtrw">Indo-Westerns</label>
-                </div>
+                          <div className="oijdmeiojewrer">
+                            <i class="fa-solid fa-plus"></i>
+                          </div>
+                        </div>
+                      ))}                      
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
       </div>     
 

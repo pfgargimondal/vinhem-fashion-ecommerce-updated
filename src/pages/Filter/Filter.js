@@ -23,6 +23,7 @@ export const Filter = () => {
   // eslint-disable-next-line
   const [allProductdata, SetallProduct] = useState([]);
   const [allFilterMappingdata, SetallFilterMappingdata] = useState([]);
+  const [filterCategories, setFilterCategories] = useState([]);
 
   const search = useLocation().search;
   const searchTerm = new URLSearchParams(search).get("search")?.trim() || "";  
@@ -111,6 +112,7 @@ export const Filter = () => {
         });
 
         SetallFilterMappingdata(response.data.data);
+        setFilterCategories(response.data.categoryData);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -208,7 +210,7 @@ export const Filter = () => {
                 }`}
                 id="res-filtr-nav"
               >
-              <FilterSection allFilterMappingdata={allFilterMappingdata} />
+              <FilterSection allFilterMappingdata={allFilterMappingdata} filterCategories={filterCategories} />
               </div>
             </div>
           </div>
