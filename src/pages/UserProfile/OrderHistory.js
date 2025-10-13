@@ -5,13 +5,25 @@ import styles from "./Css/OrderHistory.module.css";
 import { useAuth } from "../../context/AuthContext";
 import http from "../../http";
 import { useEffect, useState } from "react";
+// eslint-disable-next-line
 import { downloadInvoicePDF } from "../../utils/downloadInvoice";
 import { Invoice } from "../Invoice/Invoice";
+import { useNavigate } from "react-router-dom";
+// eslint-disable-next-line
+import jsPDF from "jspdf";
+// eslint-disable-next-line
+import html2canvas from "html2canvas";
 
 export const OrderHistory = () => {
 
     const { token } = useAuth();
     const [OrderHistory, setOrderHistory] = useState([]);
+
+    //const [orderHistory, setOrderHistory] = useState([]);
+    // eslint-disable-next-line
+    const [user, setUser] = useState(null);
+    // eslint-disable-next-line
+    const [userOrderProduct , setuserOrderProduct] = useState(null);
 
     useEffect(() => {
         if (!token) return;
@@ -21,7 +33,13 @@ export const OrderHistory = () => {
             const res = await http.get("/user/get-order-history", {
             headers: { Authorization: `Bearer ${token}` },
             });
-            setOrderHistory(res.data.data || []);
+
+             console.log("✅ Order History Fetched:", res.data); // log full response
+            console.log("🧾 Order Data:", res.data.data || []); 
+
+            setOrderHistory(res.data.data.orders || []);
+            setUser(res.data.data.user || null);
+            setuserOrderProduct(res.data.data.user_order_product_details || null);
         } catch (error) {
             console.error("Failed to fetch order history", error);
         }
@@ -30,9 +48,79 @@ export const OrderHistory = () => {
         fetchOrderHistory();
     }, [token]);
 
-    const handleDownload = () => {
-        downloadInvoicePDF("invoice-content", "OrderInvoice.pdf");
-    };
+    const navigate = useNavigate();
+
+
+const handleDownload = async (order) => {
+  try {
+    const res = await http.get("/user/get-invoice-details", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { id: order.order_id }, // 👈 send order_id as 'id'
+    });
+
+    const data = res.data.data || {};
+    const userInfo = data.user || null;
+    const orderProductDetails = data.user_order_product_details || null;
+    const getProductDetails = data.get_product_details || null;
+    const getGSTDetails = data.get_gst_value || null;
+
+    
+
+    localStorage.setItem(
+      "invoiceData",
+      JSON.stringify({
+        order,
+        user: userInfo,
+        userOrderProduct: orderProductDetails,
+        getProductDetails: getProductDetails,
+        getGSTDetails: getGSTDetails,
+      })
+    );
+
+   navigate("/invoice", {
+  state: {
+    order,
+    user: userInfo,
+    userOrderProduct: orderProductDetails,
+    getProductDetails: getProductDetails,
+    getGSTDetails: getGSTDetails,
+    pdfView: true, // signal PDF preview
+  },
+});
+  } catch (error) {
+    console.error("❌ Failed to fetch invoice details:", error);
+  }
+};
+
+const handleCancelOrder = async (order) => {
+  const confirmCancel = window.confirm("Are you sure you want to cancel this order?");
+  if (!confirmCancel) return;
+
+  try {
+    const token = localStorage.getItem("token");
+    const response = await http.post(
+      `/user/cancel-order/${order.order_id}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (response.data.success) {
+      alert("Your order has been cancelled successfully!");
+      navigate("/order-history"); 
+    } else {
+      alert(`${response.data.message || "Failed to cancel order"}`);
+    }
+  } catch (err) {
+    console.error(err);
+    alert(" Something went wrong while cancelling the order.");
+  }
+};
+
+
+
+
 
 
 
@@ -81,12 +169,12 @@ export const OrderHistory = () => {
     
                                                             <p className="mb-0">No. of items: {orderHistoryVal.total_orderProduct}</p> 
 
-                                                            <p className={`${styles.oknknkmer} mb-0`}><i class={`bi ${styles.vew_dtls} bi-eye`}></i> View Details</p>
+                                                            <p className={`${styles.oknknkmer} mb-0`}   onClick={() => navigate(`/order-details/${orderHistoryVal.order_id}`)} ><i class={`bi ${styles.vew_dtls} bi-eye`}></i> View Details</p>
                                                         </div>
 
                                                         <div className={`d-flex ${styles.dweknriwehrwer} align-items-center justify-content-between`}>
                                                             {orderHistoryVal.order_status === "Placed" ? (
-                                                                <button className={`btn ${styles.cncl_ordr} border-0 px-0`}>
+                                                                <button className={`btn ${styles.cncl_ordr} border-0 px-0`} onClick={() => handleCancelOrder(orderHistoryVal)}>
                                                                     <i className="bi me-1 bi-folder-x"></i> Cancel Order
                                                                 </button>
                                                                 ) : orderHistoryVal.order_status === "Pending" ? (
@@ -111,7 +199,7 @@ export const OrderHistory = () => {
                                                                 </button>
                                                                 )}
                                                                 {orderHistoryVal.order_status === "Deliverd" && (
-                                                                    <button className={`btn ${styles.dwnld_invce} text-success border-0 px-0`} onClick={handleDownload}>
+                                                                    <button className={`btn ${styles.dwnld_invce} text-success border-0 px-0`} onClick={() => handleDownload(orderHistoryVal)}>
                                                                         <i class="bi me-1 bi-file-earmark-arrow-down"></i> Download Invoice</button>
                                                                 )}
                                                             

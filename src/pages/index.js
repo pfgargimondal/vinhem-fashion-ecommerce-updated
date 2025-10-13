@@ -30,6 +30,7 @@ export { Career } from "./Career/Career";
 export { Profile } from "./UserProfile/Profile";
 export { CancelOrder } from "./UserProfile/CancelOrder";
 export { OrderHistory } from "./UserProfile/OrderHistory";
+export { OrderDetails } from "./UserProfile/OrderDetails";
 export { ChangePassword } from "./UserProfile/ChangePassword";
 export { Wishlist } from "./UserProfile/Wishlist";
 export { Chat } from "./UserProfile/Chat";

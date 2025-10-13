@@ -321,7 +321,20 @@
   font-size: 1rem;
   font-weight: 500;
 }
-
+.dnweikrwer{
+  width: 1.5rem;
+  height: 1.5rem;
+  background: rgba(255, 255, 255, 0.6);
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.dnweikrwer i{
+  color: var(--pink-main-color);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .small-image-tabs .nav-item {
   width: auto;
   text-align: center;
@@ -376,12 +389,14 @@
   max-height: 600px;
   border-radius: 0.375rem;
   width: 100%;
+  cursor: image-set(url(/public/images/up_down_cursor.png) 1.5x), ns-resize;
 }
+
 
 /*pd image gallery zoom*/
 
 .zoom-gallery-modal .modal-dialog {
-  max-width: 50%;
+  max-width: 73%;
   margin-top: 0;
 }
 
@@ -397,7 +412,6 @@
 
 .zoom-img {
   width: 100%;
-  max-height: 80vh;
   object-fit: contain;
   border-radius: 8px;
   cursor: zoom-in;
@@ -421,7 +435,7 @@
 
 .zoom-gallery-modal .nav.flex-column {
   overflow-y: auto;
-  max-height: 80vh;
+  max-height: 100vh;
 }
 
 .modal-backdrop{
@@ -430,6 +444,20 @@
 
 .zoom-gallery-modal{
   z-index: 9999999 !important;
+}
+
+.zoom-gallery-modal .large-image-tab .tab-content > .active{
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.zoom-gallery-modal .large-image-tab .tab-content > .active::-webkit-scrollbar{
+  width: 0;
+}
+
+.zoom-gallery-modal .large-image-tab .tab-content > .active img{
+  max-height: initial;
 }
 
 
@@ -1495,74 +1523,4 @@
 .bck-form:hover{
   margin-left: -0.2rem;
   transition: 0.2s ease-in-out;
-}
-
-
-.turbon-chart-modal{
-  width: 45%;
-  border-radius: 10px;  
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999999;
-  opacity: 1;
-  transition: 0.1s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
-}
-
-.turbon-chart-modal-hide{
-  opacity: 0 !important;
-  z-index: -9999 !important;
-  transition: 0.1s ease-in-out;
-}
-
-.turbon-chart-modal-backdrop{
-  background: rgba(0, 0, 0, 0.6);
-  top: 0;
-  left: 0;
-  z-index: 999999;
-  opacity: 1;
-  transition: 0.1s ease-in-out;
-}
-
-.turbon-chart-modal-backdrop-hide{
-  z-index: -9999 !important;
-  opacity: 0 !important;
-  transition: 0.1s ease-in-out;
-}
-
-
-
-
-.mojri-chart-modal{
-  width: 45%;
-  border-radius: 10px;  
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999999;
-  opacity: 1;
-  transition: 0.1s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
-}
-
-.mojri-chart-modal-hide{
-  opacity: 0 !important;
-  z-index: -9999 !important;
-  transition: 0.1s ease-in-out;
-}
-
-.mojri-chart-modal-backdrop{
-  background: rgba(0, 0, 0, 0.6);
-  top: 0;
-  left: 0;
-  z-index: 999999;
-  opacity: 1;
-  transition: 0.1s ease-in-out;
-}
-
-.mojri-chart-modal-backdrop-hide{
-  z-index: -9999 !important;
-  opacity: 0 !important;
-  transition: 0.1s ease-in-out;
 }

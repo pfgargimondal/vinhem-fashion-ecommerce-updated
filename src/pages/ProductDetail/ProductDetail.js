@@ -287,6 +287,26 @@ export const ProductDetail = () => {
     }
   }, [slug]);
 
+  const productLink = `${window.location.origin}/products/${productDetails?.data?.slug}`;
+  const handleWhatsAppShare = () => {
+    const message = `Check out this beautiful product: ${productLink}`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+    window.open(whatsappURL, "_blank");
+  };
+
+  const handleFacebookShare = () => {
+    const encodedURL = encodeURIComponent(productLink);
+    const facebookURL = `https://www.facebook.com/sharer/sharer.php?u=${encodedURL}`;
+    window.open(facebookURL, "_blank", "noopener,noreferrer");
+  };
+
+  const handleInstagramShare = () => {
+    navigator.clipboard.writeText(productLink);
+    window.open("https://www.instagram.com/", "_blank");
+    // alert("🔗 Product link copied! Paste it in your Instagram story, DM, or bio.");
+  };
+
   console.log(productDetails);
 
   return (
@@ -528,7 +548,9 @@ export const ProductDetail = () => {
                       <div className="saoijhdekjwirwer row align-items-center mb-3">
                         <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
                           <input type="radio" name="so" id="unstdf" className="d-none position-absolute" />
-                          <label htmlFor="unstdf" className="p-3">Unstitched Fabric <br /> <span>+<i class="bi bi-currency-rupee"></i>0.00</span></label>
+                          <label htmlFor="unstdf" className="p-3">Unstitched Fabric <br /> 
+                          <span>+<i class="bi bi-currency-rupee"></i>{productDetails?.data?.stiching_charges?.price ?? 0.00}
+                          </span></label>
                         </div>
 
                         {productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
@@ -539,12 +561,13 @@ export const ProductDetail = () => {
                           </div>
                         )}
                       </div>
+                      {productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
+                        <div className="ikasdnjiknswjirhwer mb-4">
+                          <p className="mb-1">Submit Measurement: <span><Link to="" onClick={(e) => handleShowModal(e)}>CLICK HERE</Link></span> or <span><Link to="">Later</Link></span></p>
 
-                      <div className="ikasdnjiknswjirhwer mb-4">
-                        <p className="mb-1">Submit Measurement: <span><Link to="" onClick={(e) => handleShowModal(e)}>CLICK HERE</Link></span> or <span><Link to="">Later</Link></span></p>
-
-                        <p className="mb-0">+7 days, for your chosen stitching options.</p>
-                      </div>
+                          <p className="mb-0">+7 days, for your chosen stitching options.</p>
+                        </div>
+                      )}
 
                       {/* id="custmze-otft-btn"> */}
 
@@ -1771,7 +1794,7 @@ export const ProductDetail = () => {
 
       <div className={`${showSizeGuide ? "size-guide-modal" : "size-guide-modal size-guide-modal-hide"} position-fixed bg-white`}>
         <div className="size-guide-modal-header d-flex align-items-center justify-content-between px-4 py-3">
-          <h4 className="mb-1">Size Chart for Men</h4>
+          <h4 className="mb-1">Size Chart for {productDetails?.data?.product_category}</h4>
 
           <i class="fa-solid fa-xmark" onClick={() => setShowSizeGuide(false)}></i>
         </div>
@@ -1781,7 +1804,7 @@ export const ProductDetail = () => {
             <div className="row align-items-center">
               <div className="col-lg-3 mb-3">
                 <div className="diewnrjhwerwer">
-                  <img src="/images/1.jpg" alt="" />
+                  <img src={productDetails?.data?.encoded_image_url_1} alt="" />
                 </div>
               </div>
 
@@ -1810,7 +1833,7 @@ export const ProductDetail = () => {
                   <div className="djnweuihrwer">
                     <div className="opmkojwojoiwere d-flex justify-content-between">
                       <div className="dkewhknewhirwer">
-                        <h5>Size Chart for Men</h5>
+                        <h5>Size Chart for {productDetails?.data?.product_category}</h5>
 
                         <h6 className="mb-0">BODY MEASUREMENTS [ 3-4 INCHES LOOSENING REQUIRED]</h6>
                       </div>
@@ -1932,7 +1955,26 @@ export const ProductDetail = () => {
               </Tab>
 
               <Tab eventKey="profile" title="MEASURING GUIDE">
-                <img src="/images/sawewe.jpg" className="img-fluid" alt="" />
+                {productDetails?.data?.product_category?.toLowerCase() === 'men' && (
+                  <img src="/images/sawewe.jpg" className="img-fluid" alt="" />
+                )}
+                {productDetails?.data?.product_category?.toLowerCase() === 'women' && (
+                  <img src="/images/womenSizeChart.png" className="img-fluid" alt="" />
+                )}
+
+                {productDetails?.data?.product_sub_category?.includes("(Boys)") && (
+                  <img
+                    src="/images/boySizeChart.png"
+                    className="img-fluid" alt=""
+                  />
+                )}
+
+                {productDetails?.data?.product_sub_category?.includes("(Girls)") && (
+                  <img
+                    src="/images/girlSizeChart.png"
+                    className="img-fluid" alt=""
+                  />
+                )}
               </Tab>
             </Tabs>
           </div>
@@ -1982,15 +2024,15 @@ export const ProductDetail = () => {
 
         <div className="s-s-m-options d-flex p-3 align-items-center justify-content-center">
           <div className="dmnewknoirwer me-3 whtsapp-icon position-relative rounded-pill">
-            <i class="bi position-absolute fa-2x text-white bi-whatsapp"></i>
+            <i class="bi position-absolute fa-2x text-white bi-whatsapp" onClick={handleWhatsAppShare}></i>
           </div>
 
           <div className="dmnewknoirwer me-3 facebook-icon position-relative rounded-pill">
-            <i class="fa-brands position-absolute fa-2x text-white fa-facebook-f"></i>
+            <i class="fa-brands position-absolute fa-2x text-white fa-facebook-f" onClick={handleFacebookShare}></i>
           </div>
 
           <div className="dmnewknoirwer instagram-icon position-relative rounded-pill">
-            <i class="bi position-absolute fa-2x text-white bi-instagram"></i>
+            <i class="bi position-absolute fa-2x text-white bi-instagram" onClick={handleInstagramShare}></i>
           </div>
         </div>
       </div>
@@ -2039,10 +2081,10 @@ export const ProductDetail = () => {
           size="xl"
           className="zoom-gallery-modal overflow-hidden"
         >
-        <Modal.Body className="mt-0 px-0 pb-0">
+        <Modal.Body className="mt-0 p-0 ps-3">
           <Tab.Container activeKey={activeKey} onSelect={setActiveKey}>
-            <Row>
-              <Col xs={2} className="small-image-tabs pe-0">
+            <Row className="sdgdffwesfdf">
+              <Col lg={1} className="small-image-tabs pt-1 pe-0">
                 <Nav variant="pills" className="flex-column">
                   {productDetails?.data?.product_image?.encoded_image_url_1 && (
                     <Nav.Item>
@@ -2107,8 +2149,8 @@ export const ProductDetail = () => {
                 </Nav>
               </Col>
 
-              <Col xs={9} className="large-image-tab">
-                <Tab.Content>
+              <Col lg={11} className="large-image-tab">
+                <Tab.Content className="ps-2">
                   {productDetails?.data?.product_image?.encoded_image_url_1 && (
                     <Tab.Pane eventKey="first">
                       <Zoom>

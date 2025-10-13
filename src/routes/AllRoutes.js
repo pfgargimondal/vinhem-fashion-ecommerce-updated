@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import { AboutUs, ContactUs, Filter, Home, Login, OnSale, PageNotFound, ProductDetail, Register, Wedding, TermsCondition, PrivacyPolicy, ReturnPolicy, OrderPolicy, ShippingPolicy, Testimonial, Career, Profile, CancelOrder, OrderHistory, ChangePassword, Wishlist, Cart, Blog, BlogDetails, Invoice, Checkout, Chat, TrackOrder, FAQ, ThankYou} from "../pages";
+import { AboutUs, ContactUs, Filter, Home, Login, OnSale, PageNotFound, ProductDetail, Register, Wedding, TermsCondition, PrivacyPolicy, ReturnPolicy, OrderPolicy, ShippingPolicy, Testimonial, Career, Profile, CancelOrder, OrderHistory, ChangePassword, Wishlist, Cart, Blog, BlogDetails, Invoice, Checkout, Chat, TrackOrder, FAQ, ThankYou, OrderDetails} from "../pages";
 import ProtectedRoute from "../components/ProtectedRoute ";
+
 export const AllRoutes = () => {
   return (
     <Routes>
@@ -40,6 +41,7 @@ export const AllRoutes = () => {
           <Route path="change-password" element={ <ChangePassword /> } />
           <Route path="cancelled-order" element={ <CancelOrder/> } />
           <Route path="order-history" element={ <OrderHistory/> } />
+          <Route path="order-details/:id" element={ <OrderDetails /> } />
           <Route path="wishlist" element={ <Wishlist/> } />
           <Route path="cart" element={ <Cart/> } />
           <Route path="checkout" element={ <Checkout/> } />
