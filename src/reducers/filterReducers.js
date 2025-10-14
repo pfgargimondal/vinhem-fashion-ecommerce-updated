@@ -6,6 +6,15 @@ export const filterReducer = (state, action) => {
         case "PRODUCT_LIST":
             return {...state, productList: payload.products}
 
+        case "MAIN_CATEGORY":
+            return {...state, mainCategory: payload.mainCategory, subCategory: null, filterCategory: null}
+
+        case "SUB_CATEGORY":
+            return {...state, mainCategory: payload.mainCategory, subCategory: payload.subCategory, filterCategory: null}
+
+        case "FILTER_CATEGORY":
+            return {...state, mainCategory: payload.mainCategory, subCategory: payload.subCategory, filterCategory: payload.filterCategory}
+
         case "COLOR":
             return {...state, color: payload.color}
 
@@ -39,6 +48,9 @@ export const filterReducer = (state, action) => {
         case "REST_FILTER":
             return {
                 ...state,
+                mainCategory: null,
+                subCategory: null,
+                filterCategory: null,
                 color: null,
                 fabric: null,
                 designer: null,    

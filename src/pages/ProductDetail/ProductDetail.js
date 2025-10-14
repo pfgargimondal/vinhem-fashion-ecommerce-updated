@@ -11,7 +11,6 @@ import Tabs from 'react-bootstrap/Tabs';
 import Modal from 'react-bootstrap/Modal';
 // eslint-disable-next-line
 import Form from 'react-bootstrap/Form';
-import Table from 'react-bootstrap/Table';
 import RecentlyViewed from "../../hooks/RecentlyViewed";
 import { FeaturedProducts } from "../../components";
 import Zoom from "react-medium-image-zoom";
@@ -24,6 +23,7 @@ import { FooterTopComponent } from "../../components/Others/FooterTopComponent";
 import http from "../../http";
 import { useAuth } from "../../context/AuthContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { DesignerSizeChart } from "../../components/Elements/DsignerSizeChart/DsignerSizeChart";
 
 export const ProductDetail = () => {
 
@@ -307,7 +307,71 @@ export const ProductDetail = () => {
     // alert("🔗 Product link copied! Paste it in your Instagram story, DM, or bio.");
   };
 
-  console.log(productDetails);
+
+
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedStitchOption, setSelectedStitchOption] = useState(""); // dynamic
+  const [isTurbanChecked, setIsTurbanChecked] = useState(false);
+  const [isMojriChecked, setIsMojriChecked] = useState(false);
+  const [isStoleChecked, setIsStoleChecked] = useState(false);
+  const [finalPrice, setFinalPrice] = useState(
+    parseFloat(productDetails?.data?.selling_price || 0)
+  );
+
+  const handleSizeChange = (e) => setSelectedSize(e.target.value);
+
+  useEffect(() => {
+    const selectedInventory =
+      productDetails?.data?.product_inventory?.find(
+        (item) => item.size_name === selectedSize
+      ) || {};
+
+    const basePrice = parseFloat(
+      selectedInventory.selling_price ||
+        productDetails?.data?.selling_price ||
+        0
+    );
+
+    const stitchingCharge = parseFloat(
+      productDetails?.data?.stiching_charges?.price || 0
+    );
+    const customFitCharge = parseFloat(
+      productDetails?.data?.extra_charges?.price || 0
+    );
+    const turbanPrice = parseFloat(
+      productDetails?.data?.turban_charges?.price || 0
+    );
+    const mojriPrice = parseFloat(
+      productDetails?.data?.mojri_charges?.price || 0
+    );
+    const stolePrice = parseFloat(
+      productDetails?.data?.stole_charges?.price || 0
+    );
+
+    let total = basePrice;
+
+    // Add based on user selections
+    if (selectedStitchOption === "stitch") total += stitchingCharge;
+    if (selectedStitchOption === "customFit") total += customFitCharge;
+    if (isTurbanChecked) total += turbanPrice;
+    if (isMojriChecked) total += mojriPrice;
+    if (isStoleChecked) total += stolePrice;
+
+    setFinalPrice(total);
+  }, [
+    selectedSize,
+    selectedStitchOption,
+    isTurbanChecked,
+    isMojriChecked,
+    isStoleChecked,
+    productDetails,
+  ]);
+
+  const handleStitchOptionChange = (type) => {
+    setSelectedStitchOption(type);
+  };
+
+  // console.log(productDetails);
 
   return (
     <>
@@ -458,13 +522,16 @@ export const ProductDetail = () => {
                               </Tab.Pane>
                             </Tab.Content>
 
-                            <div className="gbsdeeer dscnt-prce px-0">
+                            {/* <div className="gbsdeeer dscnt-prce px-0">
                               <span className="price">30% OFF</span>
-                            </div>
-
-                            <div className="cffdrtrvwet nw-arrvl px-0">
-                              <span className="price">New Arrival</span>
-                            </div>
+                            </div> */}
+                            {(productDetails?.data?.new_arrival?.toLowerCase() === "yes") && (
+                              <div className="cffdrtrvwet nw-arrvl px-0">
+                                  <div className="nw-arrvl px-0">
+                                    <span className="price">New Arrival</span>
+                                  </div>
+                              </div>
+                            )}
                           </div>
                         </Col>
                       </Row>
@@ -491,12 +558,12 @@ export const ProductDetail = () => {
                         <>
                           <i onClick={() =>
                             toggleWishlist(
-                              productDetails.id
+                              productDetails?.data?.id
                             )
                           }
                           className={
                             wishlistIds.includes(
-                              productDetails.id
+                              productDetails?.data?.id
                             )
                               ? "fa-solid fa-heart"
                               : "fa-regular fa-heart"
@@ -547,15 +614,19 @@ export const ProductDetail = () => {
 
                       <div className="saoijhdekjwirwer row align-items-center mb-3">
                         <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
-                          <input type="radio" name="so" id="unstdf" className="d-none position-absolute" />
-                          <label htmlFor="unstdf" className="p-3">Unstitched Fabric <br /> 
+                          <input type="radio" name="so" id="unstdf" className="d-none position-absolute" 
+                            checked={selectedStitchOption === "stitch"}
+                            onChange={() => handleStitchOptionChange("stitch")}/>
+                          <label htmlFor="unstdf" className="p-3">{productDetails?.data?.stitching_option}<br /> 
                           <span>+<i class="bi bi-currency-rupee"></i>{productDetails?.data?.stiching_charges?.price ?? 0.00}
                           </span></label>
                         </div>
 
                         {productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
                           <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
-                            <input type="radio" name="so" id="cf" className="d-none position-absolute" />
+                            <input type="radio" name="so" id="cf" className="d-none position-absolute" 
+                              checked={selectedStitchOption === "customFit"}
+                              onChange={() => handleStitchOptionChange("customFit")}/>
                             <label htmlFor="cf" className="p-3" id="cstm-fit-btn">Custom-Fit <br /> 
                             <span>+<i class="bi bi-currency-rupee"></i>{productDetails?.data?.extra_charges?.price}</span></label>
                           </div>
@@ -574,13 +645,20 @@ export const ProductDetail = () => {
                       <div className="row sdfasdctgerrrrwe">
                         <div className="col-lg-5 col-md-8 col-sm-8 col-8">
                           <div className="dgndfjgdf">
-                            <select name="product_size" id="product_size" className="form-select">
-                              {productDetails?.data?.product_inventory?.map((productSizeVal) => (
-                                <option value={productSizeVal.size_name}>
-                                  {productSizeVal.size_name}
-                                </option>
-                              ))}
-                            </select>
+                            <select
+                                name="product_size"
+                                id="product_size"
+                                className="form-select"
+                                onChange={handleSizeChange}
+                                value={selectedSize}
+                              >
+                                <option value="">Select Size</option>
+                                {productDetails?.data?.product_inventory?.map((productSizeVal) => (
+                                  <option key={productSizeVal.size_name} value={productSizeVal.size_name}>
+                                    {productSizeVal.size_name}
+                                  </option>
+                                ))}
+                              </select>
 
                             <p className="mt-2">
                               {productDetails?.data?.rts_quantity <= 5 && (
@@ -628,7 +706,8 @@ export const ProductDetail = () => {
                               <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
                                 <div class="checkbox-wrapper-33">
                                   <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" checked={isTurbanChecked}
+                                        onChange={(e) => setIsTurbanChecked(e.target.checked)}/>
 
                                     <span class="checkbox__symbol">
                                       <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
@@ -651,10 +730,54 @@ export const ProductDetail = () => {
 
                             <div className="slkdnfkmslkmr row align-items-center">
                               <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                                <select name="" className="form-select" id="">
-                                  <option value="" disabled selected>Select Size</option>
-
-                                  <option value="">1</option>
+                                <select name="" className="form-select" id="" disabled={!isTurbanChecked}>
+                                  <option value="" selected>Select Size</option>
+                                    <option value="-- U.S. &amp; Canada ----" disabled="disabled" class="disableDdlItems">-- U.S. &amp; Canada ----</option>
+                                    <option value="US Size 7.5">US Size 7.5</option>
+                                    <option value="US Size 8.5">US Size 8.5</option>
+                                    <option value="US Size 9.5">US Size 9.5</option>
+                                    <option value="US Size 10.0">US Size 10.0</option>
+                                    <option value="US Size 10.5">US Size 10.5</option>
+                                    <option value="US Size 12.0">US Size 12.0</option>
+                                    <option value="US Size 13.0">US Size 13.0</option>
+                                    <option value="US Size 14.0">US Size 14.0</option>
+                                    <option value="-- U.K. ----" disabled="disabled" class="disableDdlItems">-- U.K. ----</option>
+                                    <option value="UK Size 5.0">UK Size 5.0</option>
+                                    <option value="UK Size 6.0">UK Size 6.0</option>
+                                    <option value="UK Size 7.0">UK Size 7.0</option>
+                                    <option value="UK Size 7.5">UK Size 7.5</option>
+                                    <option value="UK Size 8.0">UK Size 8.0</option>
+                                    <option value="UK Size 9.5">UK Size 9.5</option>
+                                    <option value="UK Size 10.5">UK Size 10.5</option>
+                                    <option value="UK Size 11.5">UK Size 11.5</option>
+                                    <option value="-- Europe ----" disabled="disabled" class="disableDdlItems">-- Europe ----</option>
+                                    <option value="Euro Size 38">Euro Size 38</option>
+                                    <option value="Euro Size 39">Euro Size 39</option>
+                                    <option value="Euro Size 41">Euro Size 41</option>
+                                    <option value="Euro Size  42">Euro Size  42</option>
+                                    <option value="Euro Size  43">Euro Size  43</option>
+                                    <option value="Euro Size  43">Euro Size  43</option>
+                                    <option value="Euro Size  44">Euro Size  44</option>
+                                    <option value="Euro Size  45">Euro Size  45</option>
+                                    <option value="Euro Size  46.5">Euro Size  46.5</option>
+                                    <option value="-- India ----" disabled="disabled" class="disableDdlItems">-- India ----</option>
+                                    <option value="IN Size 5.0">IN Size 5.0</option>
+                                    <option value="IN Size 6.0">IN Size 6.0</option>
+                                    <option value="IN Size 7.0">IN Size 7.0</option>
+                                    <option value="IN Size 7.5">IN Size 7.5</option>
+                                    <option value="IN Size 8.0">IN Size 8.0</option>
+                                    <option value="IN Size 9.5">IN Size 9.5</option>
+                                    <option value="IN Size 10.5">IN Size 10.5</option>
+                                    <option value="IN Size 11.5">IN Size 11.5</option>
+                                    <option value="-- Australia ----" disabled="disabled" class="disableDdlItems">-- Australia ----</option>
+                                    <option value="AU Size 6.0">AU Size 6.0</option>
+                                    <option value="AU Size 7.0">AU Size 7.0</option>
+                                    <option value="AU Size 8.0">AU Size 8.0</option>
+                                    <option value="AU Size 8.5">AU Size 8.5</option>
+                                    <option value="AU Size 9.0">AU Size 9.0</option>
+                                    <option value="AU Size 10.5">AU Size 10.5</option>
+                                    <option value="AU Size 11.5">AU Size 11.5</option>
+                                    <option value="AU Size 12.5">AU Size 12.5</option>
                                 </select>
                               </div>
 
@@ -675,7 +798,9 @@ export const ProductDetail = () => {
                               <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
                                 <div class="checkbox-wrapper-33">
                                   <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" 
+                                        checked={isStoleChecked}
+                                        onChange={(e) => setIsStoleChecked(e.target.checked)}/>
 
                                     <span class="checkbox__symbol">
                                       <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
@@ -708,7 +833,8 @@ export const ProductDetail = () => {
                               <div className="doweriwejrwer col-lg-8 col-md-8 col-sm-8 col-8">
                                 <div class="checkbox-wrapper-33">
                                   <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" />
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" checked={isMojriChecked}
+                                          onChange={() => setIsMojriChecked(!isMojriChecked)}/>
 
                                     <span class="checkbox__symbol">
                                       <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
@@ -733,10 +859,12 @@ export const ProductDetail = () => {
 
                             <div className="slkdnfkmslkmr row align-items-center">
                               <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                                <select name="" className="form-select" id="">
+                                <select name="" className="form-select" id="" disabled={!isMojriChecked}>
                                   <option value="" disabled selected>Select Size</option>
-
-                                  <option value="">1</option>
+                                  {productDetails?.data?.turban_sizeDetails?.map((turban_sizeVal) => (
+                                    <option key={turban_sizeVal.size} value={turban_sizeVal.size}>{turban_sizeVal.size}</option>
+                                  ))}
+                                  
                                 </select>
                               </div>
 
@@ -752,7 +880,7 @@ export const ProductDetail = () => {
                     <div className="dowejkrnwerwer d-flex mt-4">
                       <div className="doenwkjriwerwer">
                         <h4 className="mb-0 me-2">You Pay: <span><i class="fa-solid fa-indian-rupee-sign">
-                          </i> {productDetails?.data?.selling_price}</span>
+                          </i>{finalPrice.toFixed(2)}</span>
                         </h4>
 
                         <p class="mt-2 mb-0">(Inclusive of all services)</p>
@@ -1823,160 +1951,7 @@ export const ProductDetail = () => {
           </div>
 
           <div className="doenwkhrkwenjkrwer">
-            <Tabs
-              defaultActiveKey="home"
-              id="uncontrolled-tab-example"
-              className="mb-3 justify-content-center"
-            >
-              <Tab eventKey="home" title="SIZE GUIDE">
-                <div className="diekhjwerwer">
-                  <div className="djnweuihrwer">
-                    <div className="opmkojwojoiwere d-flex justify-content-between">
-                      <div className="dkewhknewhirwer">
-                        <h5>Size Chart for {productDetails?.data?.product_category}</h5>
-
-                        <h6 className="mb-0">BODY MEASUREMENTS [ 3-4 INCHES LOOSENING REQUIRED]</h6>
-                      </div>
-
-                      <div className="oidahijeoijer d-flex align-items-center">
-                        <p className="mb-0">in</p>
-
-                        <div className="checkbox-wrapper-2 mx-1">
-                          <input type="checkbox" className="sc-gJwTLC ikxBAC" />
-                        </div>
-
-                        <p className="mb-0">cms</p>
-                      </div>
-                    </div>
-
-                    <div className="jnmkjhihewirwer mt-3">
-                      <Table responsive="xl">
-                        <thead>
-                          <tr>
-                            <th>(in inches)</th>
-                            <th>Chest</th>
-                            <th>Waist</th>
-                            <th>Neck</th>
-                            <th>Hip</th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                          <tr>
-                            <td>XS</td>
-                            <td>36</td>
-                            <td>28-30</td>
-                            <td>14</td>
-                            <td>36.5 - 38.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>S</td>
-                            <td>38</td>
-                            <td>30-32</td>
-                            <td>15</td>
-                            <td>38.5 - 40.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>M</td>
-                            <td>40</td>
-                            <td>32-34</td>
-                            <td>16</td>
-                            <td>40.5 - 41.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>L</td>
-                            <td>42</td>
-                            <td>34-36</td>
-                            <td>17</td>
-                            <td>41.5 - 42.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>XL</td>
-                            <td>44</td>
-                            <td>36-38</td>
-                            <td>18</td>
-                            <td>42.5 - 43.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>XXL</td>
-                            <td>46</td>
-                            <td>38-40</td>
-                            <td>19</td>
-                            <td>43.5 - 44.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>3XL</td>
-                            <td>48</td>
-                            <td>40-42</td>
-                            <td>20</td>
-                            <td>44.5 - 46.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>4XL</td>
-                            <td>50</td>
-                            <td>42-44</td>
-                            <td>21</td>
-                            <td>46.5 - 48.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>5XL</td>
-                            <td>52</td>
-                            <td>44-46</td>
-                            <td>22</td>
-                            <td>48.5 - 50.5</td>
-                          </tr>
-
-                          <tr>
-                            <td>6XL</td>
-                            <td>54</td>
-                            <td>46-48</td>
-                            <td>23</td>
-                            <td>50.5 - 52.5</td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </div>
-                  </div>
-
-                  <div className="oijdkejwjewr p-4">
-                    <h6><i class="fa-brands me-1 fa-whatsapp"></i> Whatsapp Us at <span>+91 84880 70070</span> if you are unsure of your size.</h6>
-
-                    <p className="mb-0">This is a standard size guide for the basic measurements. Length will vary according to style. There may also be variations in some brands commonly with Indian clothing, so please refer to the product measurements displayed on the product page. Alternatively, you may contact our customer care for specific queries at vinhemfashion.com</p>
-                  </div>
-                </div>
-              </Tab>
-
-              <Tab eventKey="profile" title="MEASURING GUIDE">
-                {productDetails?.data?.product_category?.toLowerCase() === 'men' && (
-                  <img src="/images/sawewe.jpg" className="img-fluid" alt="" />
-                )}
-                {productDetails?.data?.product_category?.toLowerCase() === 'women' && (
-                  <img src="/images/womenSizeChart.png" className="img-fluid" alt="" />
-                )}
-
-                {productDetails?.data?.product_sub_category?.includes("(Boys)") && (
-                  <img
-                    src="/images/boySizeChart.png"
-                    className="img-fluid" alt=""
-                  />
-                )}
-
-                {productDetails?.data?.product_sub_category?.includes("(Girls)") && (
-                  <img
-                    src="/images/girlSizeChart.png"
-                    className="img-fluid" alt=""
-                  />
-                )}
-              </Tab>
-            </Tabs>
+            <DesignerSizeChart productDetails={productDetails}/>
           </div>
         </div>
       </div>

@@ -4,6 +4,9 @@ import { filterReducer } from "../reducers/filterReducers";
 
 const filterInitialState = {
     productList: [],
+    mainCategory: null,
+    subCategory: null,
+    filterCategory: null,
     color: null,
     fabric: null,
     designer: null,    
@@ -31,6 +34,70 @@ export const FilterProvider = ({children}) => {
                 products: products
             }
         })
+    }
+
+
+    //main category
+
+    function setMainCategory(mainCategory) {
+        dispatch({
+            type: "MAIN_CATEGORY",
+            payload: {
+                mainCategory: mainCategory
+            }
+        })
+    }
+
+    function filterMainCategory(products) {
+        return state.mainCategory
+            ? products.filter(product => product.product_category.toLowerCase().trim() === state.mainCategory.toLowerCase().trim()) : products;
+    }
+
+
+    //sub category
+
+    function setSubCategory(mainCategory, subCategory) {
+        dispatch({
+            type: "SUB_CATEGORY",
+            payload: {
+                mainCategory: mainCategory,
+                subCategory: subCategory
+            }
+        })
+    }
+
+    function filterSubCategory(products) {
+        return (state.mainCategory && state.subCategory)
+            ? products.filter(product => (
+                product.product_category.toLowerCase().trim() === state.mainCategory.toLowerCase().trim()
+            ) && (
+                product.product_sub_category.toLowerCase().trim() === state.subCategory.toLowerCase().trim()
+            )) : products;
+    }
+
+
+    //filter category
+
+    function setFilterCategory(mainCategory, subCategory, filterCategory) {
+        dispatch({
+            type: "FILTER_CATEGORY",
+            payload: {
+                mainCategory: mainCategory,
+                subCategory: subCategory,
+                filterCategory: filterCategory
+            }
+        })
+    }
+
+    function filterFilterCategory(products) {
+        return (state.mainCategory && state.subCategory && state.filterCategory)
+            ? products.filter(product => (
+                product.product_category?.toLowerCase().trim() === state.mainCategory.toLowerCase().trim()
+            ) && (
+                product.product_sub_category?.toLowerCase().trim() === state.subCategory.toLowerCase().trim()
+            ) && (
+                product.filter_categories?.toLowerCase().trim() === state.filterCategory.toLowerCase().trim()
+            )) : products;
     }
 
 
@@ -213,7 +280,7 @@ export const FilterProvider = ({children}) => {
     }
 
 
-    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterSize(filterDesigner(filterFabric(filterColor(state.productList))))))))));
+    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterSize(filterDesigner(filterFabric(filterColor(filterFilterCategory(filterSubCategory(filterMainCategory(state.productList)))))))))))));
 
 
 
@@ -222,6 +289,9 @@ export const FilterProvider = ({children}) => {
         onSale: state.onSale,
         newIn: state.newIn,
         initialProductList,
+        setMainCategory,
+        setSubCategory,
+        setFilterCategory,
         setColor,
         setFabric,
         setDesigner,
