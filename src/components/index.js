@@ -3,6 +3,7 @@ export { Footer } from "./Layouts/Footer/Footer";
 
 export { FeaturedProducts } from "./Elements/FeaturedProducts/FeaturedProducts";
 export { DesignerSizeChart } from "./Elements/DsignerSizeChart/DsignerSizeChart";
+export { MeasurementForm } from "./Elements/MeasurementForm/MeasurementForm";
 
 
 export { ScrollToTop } from "./Others/ScrollToTop";
