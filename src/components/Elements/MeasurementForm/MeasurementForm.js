@@ -1,127 +1,244 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
+export const MeasurementForm = ({
+  productDetails,
+  showSizeModal,
+  setShowSizeModal,
+  mssrmntSbmtConfrm,
+  setMssrmntSbmtConfrm,
+}) => {
+  const [activeGuide, setActiveGuide] = useState(null);
+  const [feildNameGuide, setFeildNameGuide] = useState(null);
+  const [showTabs, setShowTabs] = useState(false);
 
-export const MeasurementForm = ({productDetails, showSizeModal, setShowSizeModal, mssrmntSbmtConfrm, setMssrmntSbmtConfrm}) => {
-    const [activeGuide, setActiveGuide] = useState(null);
-    const [showTabs, setShowTabs] = useState(false);
-
-
-    const handleGuideClick = (item) => {
-        setActiveGuide(activeGuide === item ? null : item);
+  const handleGuideClick = (item,feildName) => {
+    if (activeGuide === item) {
+      setActiveGuide(null);
+      setFeildNameGuide(null);
+    } else {
+      setActiveGuide(item);
+      setFeildNameGuide(feildName);
     }
+  };
 
+  const handleSizeModalClose = () => {
+    showTabs && setShowTabs(false);
 
-    const handleSizeModalClose = () => {   
-        showTabs && setShowTabs(false);
+    activeGuide && setActiveGuide(null);
 
-        activeGuide && setActiveGuide(null);       
+    setShowSizeModal(false);
+  };
 
-        setShowSizeModal(false);    
-    }
+  const [unit, setUnit] = useState("inch");
+  const [showPetticoat, setShowPetticoat] = useState(false);
+  const fields = [
+    {
+      label: "Around Bust",
+      key: "lehenga_around_bust_option",
+      image: "lehenga_around_bust",
+      guide: "aroundBust",
+    },
+    {
+      label: "Around Above Waist",
+      key: "lehenga_above_waist_option",
+      image: "lehenga_above_waist",
+      guide: "aboveWaist",
+    },
+    {
+      label: "Choli Length",
+      key: "lehenga_choli_length_option",
+      image: "lehenga_choli_length",
+      guide: "choliLength",
+    },
+    { label: "Shoulder", 
+      key: "lehenga_shoulder_option", 
+      image: "lehenga_shoulder",
+      guide: "shoulder" 
+    },
+    {
+      label: "Sleeve Length",
+      key: "lehenga_sleeve_length_option",
+      image: "lehenga_sleeve_length",
+      guide: "sleeveLength",
+    },
+    {
+      label: "Sleeve Style",
+      key: "lehenga_sleeve_style_options",
+      image: "lehenga_sleeve_style",
+      guide: "sleeveStyle",
+    },
+    {
+      label: "Around Arm",
+      key: "lehenga_around_arm_option",
+      image: "lehenga_around_arm",
+      guide: "aroundArm",
+    },
+    {
+      label: "Blouse Pads",
+      key: "lehenga_blouse_pads_options",
+      image: "lehenga_blouse_pads",
+      guide: "blousePads",
+    },
+    {
+      label: "Back Neck Depth",
+      key: "lehenga_back_neck_depth_option",
+      image: "lehenga_back_neck_depth",
+      guide: "backNeckDepth",
+    },
+    {
+      label: "Front Neck Depth",
+      key: "lehenga_front_neck_depth_option",
+      image: "lehenga_front_neck_depth",
+      guide: "frontNeckDepth",
+    },
+    {
+      label: "Choli Closing Side",
+      key: "lehenga_choli_closing_side_options",
+      image: "lehenga_choli_closing_side",
+      guide: "choliClosingSide",
+    },
+    {
+      label: "Choli Closing With",
+      key: "lehenga_choli_closing_with_options",
+      image: "lehenga_choli_closing_with",
+      guide: "choliClosingWith",
+    },
+  ];
 
+  const lehengaFields = [
+    {
+      label: "Around Waist",
+      key: "lehenga_around_waist_option",
+      image: "lehenga_around_waist",
+      guide: "aroundWaist",
+    },
+    {
+      label: "Around Hip",
+      key: "lehenga_around_hip_option",
+      image: "lehenga_around_hip",
+      guide: "aroundHip",
+    },
+    {
+      label: "Lehenga Length",
+      key: "lehenga_length_option",
+      image: "lehenga_length",
+      guide: "lehengaLength",
+    },
+    {
+      label: "Lehenga Side Closing",
+      key: "lehenga_side_closing_options",
+      image: "lehenga_side_closing",
+      guide: "lehengaSideClosing",
+    },
+    {
+      label: "Petticoat Waist (Inskirt)",
+      key: "lehenga_petticoat_waist_option",
+      image: "lehenga_petticoat_waist",
+      guide: "petticoatWaist",
+    },
+    {
+      label: "Petticoat Length (Inskirt)",
+      key: "lehenga_petticoat_length_option",
+      image: "lehenga_petticoat_length",
+      guide: "petticoatLength",
+    },
+  ];
 
-    const guides = {
-        aroundBust: {
-          label: "Around Bust",
-          img: "/images/around-bust.jpg",
-          text: "Take this measurement over the fullest part of the bust and across the widest part of the back. The measuring tape should go horizontally all around your body",
-        },
-        shoulder: {
-          label: "Shoulder",
-          img: "/images/around-bust.jpg",
-          text: "Measure from one shoulder point to the other across the back.",
-        },
-        aroundArm: {
-          label: "Around Arm",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around the fullest part of your upper arm.",
-        },
-        frontNeckDepth: {
-          label: "Front Neck Depth",
-          img: "/images/around-bust.jpg",
-          text: "Measure the depth from the shoulder down to the desired neckline point.",
-        },
-        backNeckDepth: {
-          label: "Back Neck Depth",
-          img: "/images/around-bust.jpg",
-          text: "Measure the depth from the shoulder down the back neckline point.",
-        },
-        sleeveLength: {
-          label: "Sleeve Length",
-          img: "/images/around-bust.jpg",
-          text: "Measure from shoulder tip to the desired sleeve end.",
-        },
-        sleeveStyle: {
-          label: "Sleeve Style",
-          img: "/images/around-bust.jpg",
-          text: "Choose the sleeve style (full, half, puff, etc.).",
-        },
-        aroundAboveWaist: {
-          label: "Around Above Waist",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around just above your waist.",
-        },
-        aroundHip: {
-          label: "Around Hip",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around the fullest part of your hip.",
-        },
-        kurtaLength: {
-          label: "Kurta Length",
-          img: "/images/around-bust.jpg",
-          text: "Measure from the shoulder to the desired length of the kurta.",
-        },
-        kurtaClosingSide: {
-          label: "Kurta Closing Side",
-          img: "/images/around-bust.jpg",
-          text: "Specify the closing side for your kurta (left or right).",
-        },
-        kurtaClosingWith: {
-          label: "Kurta Closing With",
-          img: "/images/around-bust.jpg",
-          text: "Specify what type of closing (zipper, hooks, buttons, etc.).",
-        },
-        aroundWaist: {
-          label: "Around Waist",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around the narrowest part of your waist.",
-        },
-        aroundThigh: {
-          label: "Around Thigh",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around the fullest part of your thigh.",
-        },
-        aroundKnee: {
-          label: "Around Knee",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around your knee.",
-        },
-        aroundCalf: {
-          label: "Around Calf",
-          img: "/images/around-bust.jpg",
-          text: "Wrap the tape measure around the fullest part of your calf.",
-        },
-        bottomLength: {
-          label: "Bottom Length",
-          img: "/images/around-bust.jpg",
-          text: "Measure from the waist to the desired length of the bottom wear.",
-        },
-        bottomStyle: {
-          label: "Bottom Style",
-          img: "/images/around-bust.jpg",
-          text: "Specify the style of the bottom wear (straight, flared, churidar, etc.).",
-        },
-        bottomClosingSide: {
-          label: "Bottom Closing Side",
-          img: "/images/around-bust.jpg",
-          text: "Specify the closing side of your bottom wear.",
-        },
-        bottomClosingWith: {
-          label: "Bottom Closing With",
-          img: "/images/around-bust.jpg",
-          text: "Specify what type of closing (zipper, hooks, drawstring, etc.).",
-        },
-    };
+   const sareeFields = [
+    {
+      label: "Around Bust",
+      key: "saree_around_bust_option",
+      image: "saree_around_bust",
+      guide: "aroundBust",
+    },
+    {
+      label: "Around Above Waist",
+      key: "saree_above_waist_option",
+      image: "saree_above_waist",
+      guide: "aboveWaist",
+    },
+    {
+      label: "Blouse Length",
+      key: "saree_blouse_length_option",
+      image: "saree_blouse_length",
+      guide: "blouseLength",
+    },
+    { label: "Shoulder", 
+      key: "saree_shoulder_option", 
+      image: "saree_shoulder",
+      guide: "shoulder" 
+    },
+    {
+      label: "Sleeve Length",
+      key: "saree_sleeve_length_option",
+      image: "saree_sleeve_length",
+      guide: "sleeveLength",
+    },
+    {
+      label: "Sleeve Style",
+      key: "saree_sleeve_style_options",
+      image: "saree_sleeve_style",
+      guide: "sleeveStyle",
+    },
+    {
+      label: "Around Arm",
+      key: "saree_around_arm_option",
+      image: "saree_around_arm",
+      guide: "aroundArm",
+    },
+    {
+      label: "Blouse Pads",
+      key: "saree_blouse_pads_options",
+      image: "saree_blouse_pads",
+      guide: "blousePads",
+    },
+    {
+      label: "Front Neck Depth",
+      key: "lehenga_front_neck_depth_option",
+      image: "lehenga_front_neck_depth",
+      guide: "frontNeckDepth",
+    },
+    {
+      label: "Back Neck Depth",
+      key: "lehenga_back_neck_depth_option",
+      image: "lehenga_back_neck_depth",
+      guide: "backNeckDepth",
+    },
+    {
+      label: "Blouse Closing Side",
+      key: "saree_blouse_closing_side_options",
+      image: "saree_blouse_closing_side",
+      guide: "blouseClosingSide",
+    },
+    {
+      label: "Blouse Closing With",
+      key: "saree_blouse_closing_with_options",
+      image: "saree_blouse_closing_with",
+      guide: "blouseClosingWith",
+    },
+    {
+      label: "Petticoat Waist (Inskirt)",
+      key: "lehenga_petticoat_waist_option",
+      image: "lehenga_petticoat_waist",
+      guide: "petticoatWaist",
+    },
+    {
+      label: "Petticoat Length (Inskirt)",
+      key: "lehenga_petticoat_length_option",
+      image: "lehenga_petticoat_length",
+      guide: "petticoatLength",
+    },
+  ];
+
+  // Helper: get options based on unit
+  const getOptions = (key) => {
+    const keyWithUnit = key.endsWith("_options") ? key : `${key}_${unit}`;
+    const dataKey =
+      productDetails?.data?.mesurament_form_data?.[`${key}_${unit}`] ||
+      productDetails?.data?.mesurament_form_data?.[keyWithUnit];
+
+    return dataKey ? dataKey.split(",").map((v) => v.trim()) : [];
+  };
 
   return (
     <div>
@@ -297,54 +414,6 @@ export const MeasurementForm = ({productDetails, showSizeModal, setShowSizeModal
                       </div>
                     )
                   )}
-
-                  {/* <div className="doeiwjrkweirwe">
-                  <input id="s2" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s2" className="text-center p-2"><span className="mb-1">31,500</span> <br /> S</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s3" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s3" className="text-center p-2"><span className="mb-1">31,500</span> <br /> L</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s4" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s4" className="text-center p-2"><span className="mb-1">31,500</span> <br /> XL</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s5" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s5" className="text-center p-2"><span className="mb-1">31,500</span> <br /> XXL</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s6" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s6" className="text-center p-2"><span className="mb-1">36,225</span> <br /> 3XL</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s7" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s7" className="text-center p-2"><span className="mb-1">36,225</span> <br /> 4XL</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s8" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s8" className="text-center p-2"><span className="mb-1">36,225</span> <br /> 5XL</label>
-                </div>
-
-                <div className="doeiwjrkweirwe">
-                  <input id="s9" name="s-optns" type="radio" className="d-none position-absolute" />
-
-                  <label htmlFor="s9" className="text-center p-2"><span className="mb-1">36,225</span> <br /> 6XL</label>
-                </div> */}
                 </div>
 
                 <p>Customized orders can take minimum 7 extra working days</p>
@@ -386,10 +455,11 @@ export const MeasurementForm = ({productDetails, showSizeModal, setShowSizeModal
                                 <input
                                   id="example-7"
                                   type="radio"
-                                  name="radio-examplessda"
                                   defaultChecked
+                                  name="unit"
+                                  checked={unit === "inch"}
+                                  onChange={() => setUnit("inch")}
                                 />
-
                                 <span>Inches</span>
                               </label>
 
@@ -400,9 +470,10 @@ export const MeasurementForm = ({productDetails, showSizeModal, setShowSizeModal
                                 <input
                                   id="example-fde"
                                   type="radio"
-                                  name="radio-examplessda"
+                                  name="unit"
+                                  checked={unit === "cm"}
+                                  onChange={() => setUnit("cm")}
                                 />
-
                                 <span>Cm</span>
                               </label>
                             </div>
@@ -410,433 +481,355 @@ export const MeasurementForm = ({productDetails, showSizeModal, setShowSizeModal
                         </div>
                       </div>
 
-                      <div className="asdasdaswwee mt-2">
-                        <h5 className="text-center text-white py-2 mb-3">
-                          Measurement
-                        </h5>
+                      {productDetails?.data?.product_sub_category ===
+                        "Lehengas" && (
+                        <>
+                          {/* Choli Measurement */}
+                          <div className="asdasdaswwee mt-2">
+                            <h5 className="text-center text-white py-2 mb-3">
+                              Choli Measurement
+                            </h5>
+                            <div className="ihkjnjdewrwer">
+                              <form className="row">
+                                {fields.map((field, index) => {
+                                  // Use unit-based key if available, otherwise fallback to field key
+                                  const keyWithUnit =
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
+                                      `${field.key}_inch`
+                                    ] ||
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
+                                      `${field.key}_cm`
+                                    ]
+                                      ? unit === "inch"
+                                        ? `${field.key}_inch`
+                                        : `${field.key}_cm`
+                                      : field.key;
 
-                        <div className="ihkjnjdewrwer">
-                          <form className="row">
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Bust
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() => handleGuideClick("aroundBust")}
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
+                                  const options =
+                                    productDetails?.data?.mesurament_form_data?.[
+                                      keyWithUnit
+                                    ]?.split(",") || [];
+
+                                  return (
+                                    <div className="col-lg-6 mb-3" key={index}>
+                                      <label className="form-label">
+                                        {field.label}
+                                        <span
+                                          className="enqury-guide"
+                                          onClick={() =>
+                                            handleGuideClick(field.guide,field.image)
+                                          }
+                                        >
+                                          <i className="fa-solid fa-info"></i>
+                                        </span>
+                                      </label>
+
+                                      <select className="form-select">
+                                        <option disabled selected>
+                                          --Select Here--
+                                        </option>
+                                        {options.map((val, i) => (
+                                          <option key={i} value={val.trim()}>
+                                            {val.trim()}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                  );
+                                })}
+                              </form>
                             </div>
+                          </div>
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Shoulder
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() => handleGuideClick("shoulder")}
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                          {/* Lehenga Measurement */}
+                          <div className="asdasdaswwee mt-2">
+                            <h5 className="text-center text-white py-2 mb-3">
+                              Lehenga Measurement
+                            </h5>
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Arm
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() => handleGuideClick("aroundArm")}
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                            <form className="row" key={`lehenga-${unit}`}>
+                              {lehengaFields.map((field, index) => {
+                                // Show checkbox before Petticoat Waist field
+                                if (
+                                  field.key === "lehenga_petticoat_waist_option"
+                                ) {
+                                  return (
+                                    <React.Fragment key={index}>
+                                      {/* Checkbox */}
+                                      <div className="col-12 mb-3">
+                                        <label className="form-label d-flex align-items-center justify-content-center">
+                                          <input
+                                            type="checkbox"
+                                            className="me-2"
+                                            checked={showPetticoat}
+                                            onChange={() =>
+                                              setShowPetticoat(!showPetticoat)
+                                            }
+                                          />
+                                          With Petticoat (Inskirt)
+                                        </label>
+                                      </div>
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Front Neck Depth
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("frontNeckDepth")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                                      {/* Waist field (only shown if checkbox is checked) */}
+                                      {showPetticoat && (
+                                        <div className="col-lg-6 mb-3">
+                                          <label className="form-label d-flex align-items-center justify-content-between">
+                                            {field.label}
+                                            <span
+                                              className="enqury-guide"
+                                              onClick={() =>
+                                                handleGuideClick(field.guide,field.image)
+                                              }
+                                            >
+                                              <i className="fa-solid fa-info"></i>
+                                            </span>
+                                          </label>
+                                          <select className="form-select">
+                                            <option disabled selected>
+                                              --Select Here--
+                                            </option>
+                                            {getOptions(field.key).map(
+                                              (val, i) => (
+                                                <option key={i} value={val}>
+                                                  {val}
+                                                </option>
+                                              )
+                                            )}
+                                          </select>
+                                        </div>
+                                      )}
+                                    </React.Fragment>
+                                  );
+                                }
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Back Neck Depth
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("backNeckDepth")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                                // Petticoat Length field (only show if checkbox is checked)
+                                if (
+                                  field.key ===
+                                    "lehenga_petticoat_length_option" &&
+                                  !showPetticoat
+                                ) {
+                                  return null;
+                                }
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Sleeve Length
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("sleeveLength")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                                // Render all other fields normally
+                                return (
+                                  <div className="col-lg-6 mb-3" key={index}>
+                                    <label className="form-label d-flex align-items-center justify-content-between">
+                                      {field.label}
+                                      <span
+                                        className="enqury-guide"
+                                        onClick={() =>
+                                          handleGuideClick(field.guide,field.image)
+                                        }
+                                      >
+                                        <i className="fa-solid fa-info"></i>
+                                      </span>
+                                    </label>
+                                    <select className="form-select">
+                                      <option disabled selected>
+                                        --Select Here--
+                                      </option>
+                                      {getOptions(field.key).map((val, i) => (
+                                        <option key={i} value={val}>
+                                          {val}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                );
+                              })}
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Sleeve Style
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("sleeveStyle")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                              <div className="col-6 mb-3">
+                                <label className="form-label d-flex align-items-center">
+                                  <input type="checkbox" className="me-2" />
+                                  Fall & Edging Work
+                                </label>
+                              </div>
+                              <div className="col-6 mb-3">
+                                <label className="form-label d-flex align-items-center">
+                                  <input type="checkbox" className="me-2" />
+                                  Matching Tassles
+                                </label>
+                              </div>
+                            </form>
+                          </div>
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Above Waist
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("aroundAboveWaist")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                          {/* Additional Customization */}
+                          <div className="col-lg-12 mb-3">
+                            <label className="form-label">
+                              Additional customization requests here.
+                            </label>
+                            <textarea
+                              name=""
+                              className="form-control"
+                              placeholder="Please specify any additional customization requests here."
+                              style={{ height: "150px" }}
+                            ></textarea>
+                          </div>
+                        </>
+                      )}
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Hip
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() => handleGuideClick("aroundHip")}
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                      {productDetails?.data?.product_sub_category ===
+                        "Sarees" && (
+                        <>
+                          {/* Lehenga Measurement */}
+                          <div className="asdasdaswwee mt-2">
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Kurta Length
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("kurtaLength")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                            <form className="row" key={`saree-${unit}`}>
+                              {sareeFields.map((field, index) => {
+                                // Show checkbox before Petticoat Waist field
+                                if (
+                                  field.key === "lehenga_petticoat_waist_option"
+                                ) {
+                                  return (
+                                    <React.Fragment key={index}>
+                                      {/* Checkbox */}
+                                      <div className="col-12 mb-3">
+                                        <label className="form-label d-flex align-items-center justify-content-center">
+                                          <input
+                                            type="checkbox"
+                                            className="me-2"
+                                            checked={showPetticoat}
+                                            onChange={() =>
+                                              setShowPetticoat(!showPetticoat)
+                                            }
+                                          />
+                                          With Petticoat (Inskirt)
+                                        </label>
+                                      </div>
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Kurta Closing Side
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("kurtaClosingSide")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                                      {/* Waist field (only shown if checkbox is checked) */}
+                                      {showPetticoat && (
+                                        <div className="col-lg-6 mb-3">
+                                          <label className="form-label d-flex align-items-center justify-content-between">
+                                            {field.label}
+                                            <span
+                                              className="enqury-guide"
+                                              onClick={() =>
+                                                handleGuideClick(field.guide,field.image)
+                                              }
+                                            >
+                                              <i className="fa-solid fa-info"></i>
+                                            </span>
+                                          </label>
+                                          <select className="form-select">
+                                            <option disabled selected>
+                                              --Select Here--
+                                            </option>
+                                            {getOptions(field.key).map(
+                                              (val, i) => (
+                                                <option key={i} value={val}>
+                                                  {val}
+                                                </option>
+                                              )
+                                            )}
+                                          </select>
+                                        </div>
+                                      )}
+                                    </React.Fragment>
+                                  );
+                                }
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Kurta Closing With
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("kurtaClosingWith")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-                          </form>
-                        </div>
-                      </div>
+                                // Petticoat Length field (only show if checkbox is checked)
+                                if (
+                                  field.key ===
+                                    "lehenga_petticoat_length_option" &&
+                                  !showPetticoat
+                                ) {
+                                  return null;
+                                }
 
-                      <div className="asdasdaswwee mt-2">
-                        <h5 className="text-center text-white py-2 mb-3">
-                          Bottom Measurement
-                        </h5>
+                                // Render all other fields normally
+                                return (
+                                  <div className="col-lg-6 mb-3" key={index}>
+                                    <label className="form-label d-flex align-items-center justify-content-between">
+                                      {field.label}
+                                      <span
+                                        className="enqury-guide"
+                                        onClick={() =>
+                                          handleGuideClick(field.guide,field.image)
+                                        }
+                                      >
+                                        <i className="fa-solid fa-info"></i>
+                                      </span>
+                                    </label>
+                                    <select className="form-select">
+                                      <option disabled selected>
+                                        --Select Here--
+                                      </option>
+                                      {getOptions(field.key).map((val, i) => (
+                                        <option key={i} value={val}>
+                                          {val}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                );
+                              })}
 
-                        <div className="ihkjnjdewrwer">
-                          <form className="row">
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Waist
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("aroundWaist")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                              <div className="col-6 mb-3">
+                                <label className="form-label d-flex align-items-center">
+                                  <input type="checkbox" className="me-2" />
+                                  Fall & Edging Work
+                                </label>
+                              </div>
+                              <div className="col-6 mb-3">
+                                <label className="form-label d-flex align-items-center">
+                                  <input type="checkbox" className="me-2" />
+                                  Matching Tassles
+                                </label>
+                              </div>
+                            </form>
+                          </div>
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Thigh
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("aroundThigh")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
+                          {/* Additional Customization */}
+                          <div className="col-lg-12 mb-3">
+                            <label className="form-label">
+                              Additional customization requests here.
+                            </label>
+                            <textarea
+                              name=""
+                              className="form-control"
+                              placeholder="Please specify any additional customization requests here."
+                              style={{ height: "150px" }}
+                            ></textarea>
+                          </div>
+                        </>
+                      )}
 
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Knee
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() => handleGuideClick("aroundKnee")}
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Around Calf
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() => handleGuideClick("aroundCalf")}
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Bottom Length
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("bottomLength")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Bottom Style
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("bottomStyle")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Bottom Closing Side
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("bottomClosingSide")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-
-                            <div className="col-lg-6 mb-3">
-                              <label className="form-label">
-                                Bottom Closing With
-                                <span
-                                  className="enqury-guide"
-                                  onClick={() =>
-                                    handleGuideClick("bottomClosingWith")
-                                  }
-                                >
-                                  <i className="fa-solid fa-info"></i>
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter value"
-                              />
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-12 mb-3">
-                        <label className="form-label">
-                          Additional customization requests here.
-                        </label>
-
-                        <textarea
-                          name=""
-                          className="form-control"
-                          placeholder="Please specify any additional customization requests here."
-                          style={{ height: "150px" }}
-                        ></textarea>
-                      </div>
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {activeGuide && (
+             {activeGuide && (
               <div className="col-lg-6">
                 <div className="doienkwjrewewr p-5 pt-2">
                   <span
                     className="bck-form"
                     onClick={() => setActiveGuide(null)}
                   >
-                    <i class="fa-solid me-1 fa-arrow-left-long"></i> Back To The
-                    Form
+                    <i className="fa-solid me-1 fa-arrow-left-long"></i> Back To The Form
                   </span>
 
                   <div className="dewnrkhwerwe">
-                    <div className="text-center">
+                    <div className="text-center mb-3">
                       <img
-                        src={guides[activeGuide]?.img}
-                        className="img-fluid mb-3"
+                        src={
+                          productDetails?.data?.mesurament_form_data?.[`${feildNameGuide}_options_photo`] ||
+                          "/images/default-guide.jpg"
+                        }
+                        className="img-fluid"
                         alt={activeGuide}
                       />
                     </div>
-
-                    <p className="mb-0">{guides[activeGuide]?.text || ""}</p>
+                    <p className="mb-0">
+                      {productDetails?.data?.mesurament_form_data?.[`${feildNameGuide}_options_description`] ||
+                        "No description available."}
+                    </p>
                   </div>
                 </div>
               </div>
